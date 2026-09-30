@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ThinKV 1단계</title>
+<style>
+  :root {
+    --bg: #fbfaf7; --surface: #ffffff; --text: #1f2328; --muted: #5d6570;
+    --border: #e4e1da; --accent: #2f6f5e; --accent-soft: #e6f1ed;
+    --warn: #8a5a00; --warn-soft: #fbf1dc; --code-bg: #f3f1ec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16181b; --surface: #1d2024; --text: #e6e6e3; --muted: #9aa1a9;
+      --border: #30343a; --accent: #7cc4ad; --accent-soft: #1f322c;
+      --warn: #e2b659; --warn-soft: #33291a; --code-bg: #24272c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16181b; --surface: #1d2024; --text: #e6e6e3; --muted: #9aa1a9;
+    --border: #30343a; --accent: #7cc4ad; --accent-soft: #1f322c;
+    --warn: #e2b659; --warn-soft: #33291a; --code-bg: #24272c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+  }
+  main { max-width: 780px; margin: 0 auto; padding: 40px 16px 80px; }
+  h1 { font-size: 1.7rem; line-height: 1.3; margin: 0 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 28px; }
+  h2 {
+    font-size: 1.2rem; margin: 44px 0 12px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  h2 .num {
+    display: inline-block; min-width: 1.8em; color: var(--accent);
+  }
+  p, li { margin: 6px 0; }
+  ol, ul { padding-left: 1.4em; }
+  code {
+    font: 0.88em/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--code-bg); padding: 1px 5px; border-radius: 4px;
+    overflow-wrap: anywhere;
+  }
+  .code {
+    position: relative; margin: 12px 0; background: var(--code-bg);
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  .code pre {
+    margin: 0; padding: 14px 16px; overflow-x: auto;
+    font: 0.86rem/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .code button {
+    position: absolute; top: 8px; right: 8px; font: inherit; font-size: 0.78rem;
+    padding: 2px 10px; border-radius: 6px; cursor: pointer;
+    background: var(--surface); color: var(--muted); border: 1px solid var(--border);
+  }
+  .code button:hover { color: var(--text); }
+  .goal {
+    background: var(--accent-soft); border-radius: 10px; padding: 16px 20px; margin: 0 0 8px;
+  }
+  .goal ol { margin: 4px 0 0; }
+  .note {
+    background: var(--warn-soft); border-left: 3px solid var(--warn);
+    border-radius: 6px; padding: 12px 16px; margin: 14px 0;
+  }
+  .note strong { color: var(--warn); }
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 12px; margin: 6px 0; border: 1px solid var(--border);
+    border-radius: 8px; background: var(--surface);
+  }
+  .checklist input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
+  .checklist label { cursor: pointer; }
+  .checklist li.done label { color: var(--muted); text-decoration: line-through; }
+  .progress { color: var(--muted); font-size: 0.9rem; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.93rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .table-wrap { overflow-x: auto; }
+  footer { margin-top: 48px; color: var(--muted); font-size: 0.88rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>ThinKV 1단계 — 희소도 3봉 확인 (E3)</h1>
+  <p class="sub">캡스톤디자인 v2 · 기준 문서: ThinKV 구현 계획 §3.1, 논문 §3.1 관찰 1·§D.1 Algorithm 1·§E.4 · 작성 2026-10-01</p>
+
+  <div class="goal">
+    <strong>1단계 목표</strong>
+    <ol>
+      <li>R1-Distill-Qwen-1.5B가 생성하는 동안 <strong>디코드 스텝마다 층별 어텐션 희소도</strong>를 모은다.</li>
+      <li>층별 KDE를 그려 <strong>봉우리가 정확히 3개인 층</strong>이 있는지 본다. 이 그림이 E3다.</li>
+      <li>있으면 그 층 4개(L*)와 골 두 곳(θ₁, θ₂)을 <code>calib.json</code>으로 뽑는다. 없으면 분기점 A로 간다.</li>
+    </ol>
+  </div>
+  <p>원논문은 3봉을 <strong>8B·70B에서만</strong> 보였다(그림 3). 1.5B에서도 나오는지가 이 계획 전체의 전제라서, 이 단계가 <strong>분기점 A</strong>다. 로드맵상 W2(9/23~9/29) 항목이라 이미 밀려 있다.</p>
+
+  <h2><span class="num">0</span>0단계에서 넘어온 것</h2>
+  <div class="table-wrap"><table>
+    <tr><th>항목</th><th>값</th></tr>
+    <tr><td>FullKV (none) 10문제</td><td>9/10 정답, 1문제 8000토큰에서 잘림, 평균 생성 2769, 초당 약 42~46토큰</td></tr>
+    <tr><td>Knorm, 1024개 유지</td><td>6/10 정답, <strong>5문제 잘림</strong>, 평균 생성 4696. 긴 문제의 KV 유지율 약 0.16~0.17</td></tr>
+    <tr><td>코드</td><td><code>eval/baseline.py</code>(none·knorm), <code>eval/compare.py</code>(비교 그림)</td></tr>
+  </table></div>
+  <p>Knorm은 캐시를 줄였지만 긴 문제에서 결론을 못 내고 끝까지 생성했다. 축출이 사고 구조를 모르면 이렇게 된다는 게 ThinKV의 출발점이다. 다만 10문제에 시드 하나라 결론으로 쓰지는 않는다.</p>
+
+  <h2><span class="num">1</span>희소도 정의</h2>
+  <p>논문 각주 2: 어텐션 행 <code>softmax(qKᵀ)</code>에서 <strong>그 행 최댓값의 1% 미만인 칸의 비율</strong>. 디코드 스텝에서는 쿼리가 1개라 행이 헤드마다 하나다.</p>
+  <ul>
+    <li>한 층의 값 = 쿼리 헤드 12개의 희소도 평균. 계획서 §3.1의 <code>(attn &lt; 0.01·max).mean()</code>과 같다.</li>
+    <li>이 모델은 28층, 쿼리 헤드 12개, KV 헤드 2개(GQA)다. eager 어텐션이 넘기는 가중치는 이미 쿼리 헤드 12개로 펼쳐진 모양 <code>(1, 12, 1, kv_len)</code>이다.</li>
+    <li>한 문제를 300토큰 생성해 본 값: 0번 층 0.78, 10번 층 0.72, 27번 층 0.57(스텝 평균). 0~1 사이 비율이다.</li>
+  </ul>
+
+  <h2><span class="num">2</span>수집 — <code>calib/collect_sparsity.py</code></h2>
+  <p>느린 수집과 빠른 분석을 파일 두 개로 나눈다. KDE 폭을 바꿔 가며 분석을 여러 번 다시 돌려야 하는데, 그때마다 생성을 다시 할 수는 없다. (계획서 §5는 <code>calibrate.py</code> 하나로 적혀 있다. 나누기로 하면 계획서에 이유와 날짜를 적는다.)</p>
+
+  <p><strong>모델 로드.</strong> <code>attn_implementation="eager"</code>가 핵심이다. sdpa(기본값)에서는 어텐션 가중치가 계산되지 않아 <code>None</code>이 온다. <strong>kvpress는 import하지 않는다.</strong></p>
+  <div class="code"><button>복사</button><pre>model = AutoModelForCausalLM.from_pretrained(
+    model_name, dtype=torch.bfloat16, device_map=device, attn_implementation="eager")
+assert "kvpress" not in sys.modules   # import 만 해도 어텐션이 전역 패치된다</pre></div>
+
+  <p><strong>층마다 forward hook.</strong> transformers 5.2의 <code>Qwen2Attention.forward</code>는 <code>(attn_output, attn_weights)</code>를 돌려주므로 <code>self_attn</code>에 hook을 걸면 가중치를 받는다. 아래 코드는 이 Mac에서 돌려서 확인했다.</p>
+  <div class="code"><button>복사</button><pre>n_layers = model.config.num_hidden_layers          # 28
+buf = [[] for _ in range(n_layers)]
+
+def make_hook(i):
+    def hook(module, args, output):
+        w = output[1]                      # eager 일 때만 채워진다: (batch, heads, q_len, kv_len)
+        if w.shape[2] != 1:                # prefill 은 건너뛴다
+            return
+        row = w[0, :, 0, :].float()        # (heads, kv_len)
+        buf[i].append((row &lt; 0.01 * row.amax(-1, keepdim=True)).float().mean())
+    return hook
+
+handles = [layer.self_attn.register_forward_hook(make_hook(i))
+           for i, layer in enumerate(model.model.layers)]
+
+# 문제마다
+for b in buf: b.clear()
+out = model.generate(..., pad_token_id=tokenizer.eos_token_id)
+sparsity = torch.stack([torch.stack(b) for b in buf]).cpu()   # (28, gen_len - 1)</pre></div>
+  <ul>
+    <li><strong><code>.item()</code>을 hook 안에서 부르지 않는다.</strong> 스텝마다 28번 GPU 동기화가 걸려 초당 21토큰으로 떨어졌다. 텐서로 쌓았다가 문제가 끝날 때 한 번에 옮기면 초당 약 36토큰이다.</li>
+    <li>배열 길이는 <strong>생성 길이 − 1</strong>이다. 첫 토큰은 prefill에서 나오기 때문이다. 20토큰·600토큰 생성으로 <code>(28, 19)</code>, <code>(28, 599)</code>를 확인했다.</li>
+  </ul>
+
+  <p><strong>데이터.</strong> 계획서대로 s1K(<code>simplescaling/s1K-1.1</code>, 1000문제)를 쓴다. 평가셋(MATH-500)과 겹치지 않게 하려는 것이다.</p>
+  <ul>
+    <li><code>cot_type == "math"</code>인 877문제만 남기고 <code>shuffle(seed=0)</code> 후 앞에서부터 P개.</li>
+    <li>s1K 문제에는 boxed 지시문이 <strong>없다</strong>(math500과 다르다). R1 권장 형식대로 <code>"\nPlease reason step by step, and put your final answer within \boxed{}."</code>를 붙인다.</li>
+    <li>샘플링은 0단계와 같이 <code>temperature=0.6, top_p=0.95</code>, 시드 0. <code>max_new_tokens=4096</code>. s1K는 AIME급이 많아 대부분 4096에서 잘리겠지만, 캘리브레이션에 필요한 건 스텝별 희소도라 문제없다.</li>
+  </ul>
+
+  <p><strong>저장.</strong> 문제마다 파일 하나. 이미 있으면 건너뛰어 중간에 멈춰도 이어 돌릴 수 있다(0단계 JSONL과 같은 원리).</p>
+  <div class="code"><button>복사</button><pre>torch.save({"idx": idx, "sparsity": sparsity.half(),
+            "token_ids": out[0, input_len:].cpu(), "input_len": input_len},
+           f"calib/sparsity/{idx:04d}.pt")</pre></div>
+  <p><code>token_ids</code>를 같이 남기는 이유: 나중에 논문 그림 3처럼 "스텝별 희소도 + 키워드로 칠한 R/E/T 구간" 그림을 그리거나 E3′(키워드 vs 어텐션 라벨 비교)를 할 때 생성을 다시 하지 않아도 된다.</p>
+
+  <div class="table-wrap"><table>
+    <tr><th>규모</th><th>토큰 수(최대)</th><th>예상 시간(Mac)</th><th>용도</th></tr>
+    <tr><td>P = 1, 300토큰</td><td>300</td><td>1분 미만</td><td>hook·저장 모양 확인</td></tr>
+    <tr><td><strong>P = 10</strong></td><td>약 4만</td><td>약 20~30분</td><td>E3 그림과 분기점 A 판정</td></tr>
+    <tr><td>P = 100</td><td>약 40만</td><td>약 3~4시간 (밤에 돌리기)</td><td>최종 <code>calib.json</code></td></tr>
+  </table></div>
+  <p>시간은 600토큰에서 잰 초당 36토큰 기준이다. eager 어텐션은 문맥이 길수록 느려지니 넉넉히 잡았다.</p>
+
+  <h2><span class="num">3</span>분석 — <code>calib/calibrate.py</code></h2>
+  <p>CPU에서 몇 초면 끝난다. Algorithm 1의 13~31행이다.</p>
+  <ol>
+    <li>프롬프트 p, 층 ℓ마다 희소도 배열에 KDE를 적용하고 봉우리 수를 센다.</li>
+    <li>봉우리가 정확히 3개인 층을 <code>L*[p]</code>에 넣는다.</li>
+    <li><code>L* = ∩ L*[p]</code> (모든 프롬프트에서 3봉인 층).</li>
+    <li>L*의 각 층·각 프롬프트에서 봉우리 사이 골 두 곳을 θ₁, θ₂로 기록하고, 전부 평균한다.</li>
+  </ol>
+  <p>봉우리·골 찾기. 인위적으로 만든 3봉/1봉 데이터로 확인했다.</p>
+  <div class="code"><button>복사</button><pre>import numpy as np
+from scipy.stats import gaussian_kde
+from scipy.signal import find_peaks
+
+def modes_and_valleys(u, bw=None, prom=0.05):
+    xs = np.linspace(0, 1, 512)
+    d = gaussian_kde(u, bw_method=bw)(xs)
+    d = d / d.max()
+    peaks, _ = find_peaks(d, prominence=prom)          # 작은 출렁임은 봉우리로 안 센다
+    valleys = [xs[a + np.argmin(d[a:b])] for a, b in zip(peaks[:-1], peaks[1:])]
+    return xs[peaks], valleys</pre></div>
+  <div class="note"><strong>KDE 폭(bandwidth)이 봉우리 수를 정한다.</strong> 같은 1봉 데이터가 <code>bw=0.1</code>에서는 2봉으로 나왔다(Scott 기본값과 0.3에서는 1봉). <code>bw_method</code>에 숫자를 주면 절대 폭이 아니라 데이터 표준편차에 곱하는 배율이다. 판정은 반드시 <strong>폭 세 가지(Scott 기본, ×0.5, ×2)에서 결과가 같은지</strong> 보고 내린다. 쓴 폭과 <code>prom</code> 값은 <code>calib.json</code>에 같이 적는다.</div>
+
+  <p><strong>교집합이 비거나 4개보다 적을 때.</strong> 프롬프트가 많을수록 "모든 프롬프트에서 3봉"은 거의 불가능해진다. 논문은 이 경우를 말하지 않는다. 그때는 층마다 <strong>3봉이 나온 프롬프트 비율</strong>을 세서 상위 4개 층을 L*로 쓴다. Algorithm 1 24행과 다르므로 계획서에 적는다.</p>
+
+  <p><strong>산출물.</strong></p>
+  <div class="code"><button>복사</button><pre>calib/calib.json = {
+  "L_star": [...],            # 층 번호 4개
+  "theta": [θ1, θ2],          # θ1 &lt; θ2
+  "P": 10, "max_new_tokens": 4096, "bw": "scott", "prom": 0.05,
+  "three_mode_frac": [...]    # 28개 층 각각 3봉이 나온 프롬프트 비율
+}</pre></div>
+  <p><strong>그림 두 장.</strong></p>
+  <ul>
+    <li><strong>E3 그림</strong>: 28개 층을 작은 칸(7×4)으로 나누고, 칸마다 프롬프트별 KDE를 얇은 선으로 겹쳐 그린다. 칸 제목에 3봉 비율. 논문 §E.4 그림과 비교하는 대상이다.</li>
+    <li><strong>그림 3 재현</strong>: 프롬프트 하나, L* 중 한 층. 가로 디코드 스텝, 세로 희소도(128스텝 이동평균). θ₁·θ₂를 가로선으로. 세 띠로 갈라지는지 눈으로 본다.</li>
+  </ul>
+
+  <h2><span class="num">4</span>분기점 A 판정</h2>
+  <div class="table-wrap"><table>
+    <tr><th>결과</th><th>다음</th></tr>
+    <tr><td><strong>3봉 층이 4개 이상</strong>이고 폭 세 가지에서 유지된다</td><td>그대로 진행. 2단계 온라인 분류기(구현 계획 §3.1 "온라인")</td></tr>
+    <tr><td>3봉이 안 나온다(2봉 또는 연속)</td><td>로드맵 분기점 A: (a) |T|=2로 줄여 단순 버전 재현 + "SLM에서는 전환 사고가 분리되지 않는다"를 결과로 보고, 또는 (b) Don't Waste Bits의 엔트로피·희귀도를 보조 신호로 넣는 분류기를 앞당긴다</td></tr>
+  </table></div>
+  <p>"몇 %의 프롬프트에서 3봉이면 나온 것으로 치는가"는 계획서에 없다. 결과를 보기 <strong>전에</strong> 기준을 정해 계획서에 적어 둔다(예: 3봉 비율 50% 이상인 층이 4개 이상). 결과를 보고 기준을 맞추면 판정이 의미가 없어진다.</p>
+
+  <h2><span class="num">✓</span>완료 기준</h2>
+  <p class="progress" id="progress"></p>
+  <ul class="checklist" id="checklist">
+    <li><input type="checkbox" id="c1"><label for="c1">수집 스크립트가 kvpress를 import하지 않는다 (<code>assert "kvpress" not in sys.modules</code>)</label></li>
+    <li><input type="checkbox" id="c2"><label for="c2">1문제에서 희소도 배열 모양이 <code>(28, 생성 길이 − 1)</code>이다</label></li>
+    <li><input type="checkbox" id="c3"><label for="c3">분기점 A 판정 기준을 결과 보기 전에 계획서에 적었다</label></li>
+    <li><input type="checkbox" id="c4"><label for="c4">P = 10 수집이 끝났다 (<code>calib/sparsity/*.pt</code> 10개)</label></li>
+    <li><input type="checkbox" id="c5"><label for="c5">E3 그림(28층 KDE)과 그림 3 재현 그림을 그렸다</label></li>
+    <li><input type="checkbox" id="c6"><label for="c6">KDE 폭 세 가지에서 층별 3봉 비율을 비교했다</label></li>
+    <li><input type="checkbox" id="c7"><label for="c7"><code>calib.json</code>을 저장했다 (또는 "3봉 없음"으로 판정했다)</label></li>
+    <li><input type="checkbox" id="c8"><label for="c8">분기점 A 판정과 근거 그림을 구현 계획·로드맵에 기록했다</label></li>
+  </ul>
+
+  <h2><span class="num">!</span>막히기 쉬운 곳</h2>
+  <ul>
+    <li><strong>hook에서 <code>output[1]</code>이 <code>None</code></strong>이면 eager로 로드되지 않은 것이다. <code>model.config._attn_implementation</code>을 출력해 본다.</li>
+    <li><strong>kvpress import 금지.</strong> 같은 파이썬 프로세스에서 <code>eval/baseline.py</code>의 함수를 import하는 것도 조심한다. <code>make_press</code>를 부르지 않으면 괜찮지만, 캘리브레이션 파일은 아예 따로 두는 게 안전하다.</li>
+    <li><strong>생성 초반 스텝</strong>은 문맥이 짧아 희소도가 다르게 움직일 수 있다. 앞 N스텝을 뺄지는 논문에 없다. 먼저 빼지 않고 그려 보고, 초반이 따로 봉우리를 만들면 그때 정한다.</li>
+    <li><strong>프롬프트 토큰도 행에 포함된다.</strong> 희소도는 프롬프트+지금까지 생성한 토큰 전체에 대한 비율이다. 논문 정의가 그렇다.</li>
+    <li><strong>MPS는 같은 시드여도 비트 단위 재현이 안 된다.</strong> 다시 돌리면 생성이 달라질 수 있으니 수집 결과(<code>.pt</code>)를 지우지 않는다.</li>
+    <li><strong>메모리.</strong> eager는 prefill에서 <code>(12, 입력, 입력)</code> 가중치를 만든다. s1K 문제 길이에서는 문제없지만, 긴 문맥 프롬프트를 넣으면 커진다.</li>
+  </ul>
+
+  <h2><span class="num">→</span>다음 단계</h2>
+  <p>3봉이 나오면 2단계: 온라인 분류기. <code>DecodingPress</code>를 상속한 press의 hook에서 L* 층만 마지막 쿼리 어텐션을 다시 계산해 희소도를 쌓고, 128스텝마다 θ와 비교해 R/E/T를 붙인다(구현 계획 §3.1 "온라인"). 이때는 kvpress를 쓰므로 eager가 아니라 kvpress 레시피(<code>CAMPress._compute_current_token_attention</code>)로 희소도를 구한다. 1단계 값과 2단계 값이 같은 문제에서 일치하는지가 2단계의 첫 확인 항목이다.</p>
+  <p>병행: GPU 확정(본 실험 E0와 6단계 Triton 커널에 필요), E3′ 키워드 베이스라인(1단계에서 저장한 <code>token_ids</code>를 재사용).</p>
+
+  <footer>관련: ThinKV 구현 계획 · v2 로드맵 · 00 우려사항 등록부(V3) · 사고 분해 — 키워드 베이스라인과 어텐션 분류 · 부록 지도 · ThinKV 0단계</footer>
+</main>
+<script>
+  document.querySelectorAll('.code button').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.nextElementSibling.innerText;
+      try { await navigator.clipboard.writeText(text); btn.textContent = '복사됨'; }
+      catch (e) { btn.textContent = '실패'; }
+      setTimeout(() => { btn.textContent = '복사'; }, 1400);
+    });
+  });
+
+  const KEY = 'thinkv-step1-checklist';
+  const boxes = [...document.querySelectorAll('#checklist input')];
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  function render() {
+    const n = boxes.filter(b => b.checked).length;
+    document.getElementById('progress').textContent = `${n} / ${boxes.length} 완료`;
+    boxes.forEach(b => b.closest('li').classList.toggle('done', b.checked));
+  }
+  boxes.forEach(b => {
+    b.checked = !!saved[b.id];
+    b.addEventListener('change', () => {
+      saved[b.id] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      render();
+    });
+  });
+  render();
+</script>
+</body>
+</html>

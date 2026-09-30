@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ThinKV 0단계</title>
+<style>
+  :root {
+    --bg: #fbfaf7; --surface: #ffffff; --text: #1f2328; --muted: #5d6570;
+    --border: #e4e1da; --accent: #2f6f5e; --accent-soft: #e6f1ed;
+    --warn: #8a5a00; --warn-soft: #fbf1dc; --code-bg: #f3f1ec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16181b; --surface: #1d2024; --text: #e6e6e3; --muted: #9aa1a9;
+      --border: #30343a; --accent: #7cc4ad; --accent-soft: #1f322c;
+      --warn: #e2b659; --warn-soft: #33291a; --code-bg: #24272c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16181b; --surface: #1d2024; --text: #e6e6e3; --muted: #9aa1a9;
+    --border: #30343a; --accent: #7cc4ad; --accent-soft: #1f322c;
+    --warn: #e2b659; --warn-soft: #33291a; --code-bg: #24272c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+  }
+  main { max-width: 780px; margin: 0 auto; padding: 40px 16px 80px; }
+  h1 { font-size: 1.7rem; line-height: 1.3; margin: 0 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 28px; }
+  h2 {
+    font-size: 1.2rem; margin: 44px 0 12px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  h2 .num {
+    display: inline-block; min-width: 1.8em; color: var(--accent);
+  }
+  p, li { margin: 6px 0; }
+  ol, ul { padding-left: 1.4em; }
+  code {
+    font: 0.88em/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--code-bg); padding: 1px 5px; border-radius: 4px;
+    overflow-wrap: anywhere;
+  }
+  .code {
+    position: relative; margin: 12px 0; background: var(--code-bg);
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  .code pre {
+    margin: 0; padding: 14px 16px; overflow-x: auto;
+    font: 0.86rem/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .code button {
+    position: absolute; top: 8px; right: 8px; font: inherit; font-size: 0.78rem;
+    padding: 2px 10px; border-radius: 6px; cursor: pointer;
+    background: var(--surface); color: var(--muted); border: 1px solid var(--border);
+  }
+  .code button:hover { color: var(--text); }
+  .goal {
+    background: var(--accent-soft); border-radius: 10px; padding: 16px 20px; margin: 0 0 8px;
+  }
+  .goal ol { margin: 4px 0 0; }
+  .note {
+    background: var(--warn-soft); border-left: 3px solid var(--warn);
+    border-radius: 6px; padding: 12px 16px; margin: 14px 0;
+  }
+  .note strong { color: var(--warn); }
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 12px; margin: 6px 0; border: 1px solid var(--border);
+    border-radius: 8px; background: var(--surface);
+  }
+  .checklist input { margin-top: 6px; width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
+  .checklist label { cursor: pointer; }
+  .checklist li.done label { color: var(--muted); text-decoration: line-through; }
+  .progress { color: var(--muted); font-size: 0.9rem; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.93rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .table-wrap { overflow-x: auto; }
+  footer { margin-top: 48px; color: var(--muted); font-size: 0.88rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>ThinKV 0단계 — 환경과 FullKV 기준선</h1>
+  <p class="sub">캡스톤디자인 v2 · 기준 문서: ThinKV 구현 계획, kvpress 조사 노트 · 작성 2026-09-30</p>
+
+  <div class="goal">
+    <strong>0단계 목표</strong>
+    <ol>
+      <li>이 Mac(M5 Pro, 48GB)에서 kvpress 환경을 만든다.</li>
+      <li>압축 없는 기준 결과(FullKV)를 MATH-500 몇 문제로 뽑는다.</li>
+      <li>kvpress의 디코드 압축이 Mac(MPS)에서 실제로 걸리는지 확인한다.</li>
+    </ol>
+  </div>
+  <p>여기서 잰 <strong>토큰/초</strong>가 GPU 서버를 언제, 얼마나 빌릴지 정하는 근거가 된다.</p>
+
+  <h2><span class="num">1</span>환경 만들기</h2>
+  <p>Mac의 기본 파이썬이 3.14라서 torch 호환이 불안하다. uv로 3.12 환경을 따로 만든다. 폴더 구조는 구현 계획 §5를 따른다.</p>
+  <div class="code"><button>복사</button><pre>mkdir -p ~/dev/thinkv-kvpress &amp;&amp; cd ~/dev/thinkv-kvpress
+git init
+uv venv --python 3.12 .venv-kvpress
+source .venv-kvpress/bin/activate
+uv pip install kvpress scipy matplotlib
+python -c "import torch, transformers, kvpress; print(torch.__version__, transformers.__version__, torch.backends.mps.is_available())"</pre></div>
+  <p>마지막 줄에서 확인할 것:</p>
+  <ul>
+    <li><code>mps</code> 값이 <code>True</code>여야 한다.</li>
+    <li>transformers가 <strong>4.56 이상 5.3 미만</strong>이어야 한다. kvpress가 이 범위로 고정하고 층별 캐시 API(<code>cache.layers[i].keys</code>)를 직접 만지기 때문이다.</li>
+  </ul>
+  <p>모델은 <code>deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B</code>. bf16 기준 약 3.5GB이고 처음 로드할 때 자동으로 받아진다.</p>
+
+  <h2><span class="num">2</span>FullKV 기준 결과 — <code>eval/baseline.py</code></h2>
+  <p>kvpress의 <code>pipeline</code>은 쓰지 않는다. 기본값이 그리디 디코딩에 <code>max_new_tokens=50</code>이라 추론 모델 평가에 맞지 않는다. <strong><code>model.generate</code>를 직접 부른다.</strong></p>
+  <p>스크립트가 할 일:</p>
+  <ol>
+    <li>모델을 <code>dtype=torch.bfloat16</code>으로 로드하고 (transformers 4.56부터 <code>torch_dtype</code> 대신 <code>dtype</code>) <code>.to("mps")</code>로 올린다.</li>
+    <li>데이터는 MATH-500. kvpress 평가 레지스트리가 쓰는 <code>alessiodevoto/math500</code>을 <code>datasets</code>로 받는다.</li>
+    <li>프롬프트는 R1-Distill 권장 형식. 시스템 프롬프트 없이, 문제 뒤에 <code>Please reason step by step, and put your final answer within \boxed{}.</code>를 붙이고 <code>tokenizer.apply_chat_template(..., add_generation_prompt=True)</code>로 감싼다.</li>
+    <li>샘플링은 <code>do_sample=True, temperature=0.6, top_p=0.95</code>. 계획서 E0 설정과 같다.</li>
+    <li><code>max_new_tokens</code>는 로컬에서 <strong>8000</strong>. 본 실험은 16k지만 Mac에서는 너무 오래 걸린다.</li>
+    <li>출력에서 마지막 <code>\boxed{...}</code>를 뽑아 정답과 비교한다. 괄호가 중첩될 수 있으니 정규식 말고 중괄호 개수를 세서 추출한다.</li>
+    <li>문제마다 한 줄씩 JSONL로 저장한다.</li>
+  </ol>
+  <p>저장 필드는 처음부터 이렇게 잡는다. 이후 모든 실험이 같은 형식을 쓴다.</p>
+  <div class="code"><button>복사</button><pre>{"id", "press": "none", "correct", "gen_len", "truncated", "seconds", "tok_per_s"}</pre></div>
+  <div class="table-wrap"><table>
+    <tr><th>필드</th><th>왜 필요한가</th></tr>
+    <tr><td><code>gen_len</code></td><td>생성 토큰 수. 양자화만 하면 생성이 길어지는 현상(Fig 10d, 최대 5.1배)을 보려면 이 기준선이 있어야 한다.</td></tr>
+    <tr><td><code>truncated</code></td><td>EOS 전에 <code>max_new_tokens</code>에 닿았는지. 잘린 문제는 오답과 구분해서 봐야 한다.</td></tr>
+    <tr><td><code>tok_per_s</code></td><td>GPU 서버 결정의 근거.</td></tr>
+  </table></div>
+  <div class="note"><strong>먼저 1문제만.</strong> 끝까지 생성되고 <code>\boxed{}</code>가 추출되면 10문제로 늘린다.</div>
+
+  <h2><span class="num">3</span>디코드 압축이 Mac에서 걸리는지 확인</h2>
+  <p>같은 스크립트에 옵션을 하나 추가해, 같은 10문제를 kvpress 내장 압축으로 돌린다.</p>
+  <div class="code"><button>복사</button><pre>from kvpress import DecodingPress, KnormPress
+
+press = DecodingPress(base_press=KnormPress(), compression_interval=512, target_size=1024)
+with torch.no_grad(), press(model):
+    out = model.generate(..., return_dict_in_generate=True)</pre></div>
+  <p>확인할 것:</p>
+  <ul>
+    <li><strong>캐시가 실제로 줄었는지.</strong> <code>out.past_key_values.layers[0].keys.shape[2]</code>를 출력한다. <strong>1024~1535</strong> 사이면 정상이다. 512스텝마다 압축이 걸려 그 사이에서 톱니처럼 움직인다. 전체 생성 길이가 그대로 나오면 hook이 안 걸린 것이다.</li>
+    <li><strong>FullKV와 비교.</strong> 정확도와 생성 길이를 나란히 놓는다. 이게 계획서 E1의 첫 점이다.</li>
+  </ul>
+
+  <h2><span class="num">✓</span>완료 기준</h2>
+  <p class="progress" id="progress"></p>
+  <ul class="checklist" id="checklist">
+    <li><input type="checkbox" id="c1"><label for="c1"><code>mps=True</code>이고 transformers 버전이 4.56 이상 5.3 미만이다</label></li>
+    <li><input type="checkbox" id="c2"><label for="c2">1문제가 끝까지 생성되고 boxed 답이 추출된다</label></li>
+    <li><input type="checkbox" id="c3"><label for="c3">FullKV 10문제 결과가 JSONL로 저장된다</label></li>
+    <li><input type="checkbox" id="c4"><label for="c4">Knorm 압축으로 돌렸을 때 캐시 길이가 1024~1535로 유지된다</label></li>
+    <li><input type="checkbox" id="c5"><label for="c5">토큰/초를 기록했다</label></li>
+  </ul>
+  <p>토큰/초로 판단하는 법: 예를 들어 초당 20토큰이면 8000토큰 한 문제에 약 7분이다. 그러면 10문제 개발용으로는 Mac이 충분하지만, 본 평가(MATH-500 × 8샘플 × 시드 3, 16k)는 불가능하다는 게 숫자로 나온다. 그 숫자를 들고 GPU 서버를 알아본다.</p>
+
+  <h2><span class="num">!</span>막히기 쉬운 곳</h2>
+  <ul>
+    <li><strong>MPS에서 bf16 오류</strong>가 나면 <code>torch.float32</code>로 바꾼다(약 7GB, 48GB에 충분). <code>float16</code>은 Qwen2 계열에서 값이 넘쳐 NaN이나 이상한 출력이 나올 수 있어 피한다.</li>
+    <li><strong>kvpress가 MPS에서 안 도는 경우.</strong> 단위 테스트는 CPU에서 돌고 일부 코드에 mps 분기도 있지만, 디코드 압축 전체가 MPS에서 도는지는 확인된 적이 없다. 에러가 나면 전체 메시지를 남겨둔다.</li>
+    <li><strong><code>import kvpress</code>만 해도 어텐션 함수가 전역으로 바뀐다.</strong> 0단계에서는 문제없지만, 1단계 캘리브레이션 스크립트에서는 kvpress를 import하지 않는다.</li>
+    <li><strong>한 <code>with press(model)</code> 안에서 여러 문제를 연달아 돌리면</strong> <code>DecodingPress</code>의 버퍼·카운터가 이전 문제 것이 남는다. 문제마다 <code>with</code>를 새로 연다.</li>
+  </ul>
+
+  <h2><span class="num">→</span>다음 단계</h2>
+  <p>체크리스트를 다 채우면 FullKV·Knorm 결과 JSONL과 토큰/초를 가지고 1단계(희소도 3봉 확인, E3)를 Mac에서 할지, GPU를 먼저 구할지 정한다. 1단계 방법은 구현 계획 §3.1과 부록 §D.1 Algorithm 1.</p>
+
+  <footer>관련: ThinKV 구현 계획 · v2 로드맵 · kvpress · 논문2 읽기 가이드</footer>
+</main>
+<script>
+  document.querySelectorAll('.code button').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.nextElementSibling.innerText;
+      try { await navigator.clipboard.writeText(text); btn.textContent = '복사됨'; }
+      catch (e) { btn.textContent = '실패'; }
+      setTimeout(() => { btn.textContent = '복사'; }, 1400);
+    });
+  });
+
+  const KEY = 'thinkv-step0-checklist';
+  const boxes = [...document.querySelectorAll('#checklist input')];
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  function render() {
+    const n = boxes.filter(b => b.checked).length;
+    document.getElementById('progress').textContent = `${n} / ${boxes.length} 완료`;
+    boxes.forEach(b => b.closest('li').classList.toggle('done', b.checked));
+  }
+  boxes.forEach(b => {
+    b.checked = !!saved[b.id];
+    b.addEventListener('change', () => {
+      saved[b.id] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      render();
+    });
+  });
+  render();
+</script>
+</body>
+</html>
