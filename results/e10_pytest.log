@@ -1,0 +1,124 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.15, pytest-9.2.0, pluggy-1.7.0 -- /venv/main/bin/python
+rootdir: /root/e10
+plugins: anyio-4.15.1, platformdirs-4.13.5
+collecting ... collected 44 items
+
+tests/kernels/test_block_table.py::test_V4_I3_after_every_op[8] PASSED
+tests/kernels/test_block_table.py::test_V4_I3_after_every_op[16] PASSED
+tests/kernels/test_block_table.py::test_V3_I1_I2_1000_timelines[8] PASSED
+tests/kernels/test_block_table.py::test_V3_I1_I2_1000_timelines[16] PASSED
+tests/kernels/test_block_table.py::test_slot_order_rules PASSED
+tests/kernels/test_block_table.py::test_kernel_inputs_padding PASSED
+tests/kernels/test_block_table.py::test_evict_unknown_slot_raises PASSED
+tests/kernels/test_gather.py::test_gather_attention_matches_dense[8] PASSED
+tests/kernels/test_gather.py::test_gather_attention_matches_dense[16] PASSED
+tests/kernels/test_gpu.py::test_store_kv[8] PASSED
+tests/kernels/test_gpu.py::test_store_kv[16] PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[1-8-llama8b] 
+[step3 llama8b bs=8 B=1] max abs err = 5.689e-04
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[1-8-qwen1.5b] 
+[step3 qwen1.5b bs=8 B=1] max abs err = 5.217e-04
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[1-16-llama8b] 
+[step3 llama8b bs=16 B=1] max abs err = 6.047e-04
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[1-16-qwen1.5b] 
+[step3 qwen1.5b bs=16 B=1] max abs err = 5.140e-04
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[8-8-llama8b] 
+[step3 llama8b bs=8 B=8] max abs err = 6.352e-04
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[8-8-qwen1.5b] 
+[step3 qwen1.5b bs=8 B=8] max abs err = 6.496e-04
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[8-16-llama8b] 
+[step3 llama8b bs=16 B=8] max abs err = 1.520e-03
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[8-16-qwen1.5b] 
+[step3 qwen1.5b bs=16 B=8] max abs err = 1.464e-03
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[80-8-llama8b] 
+[step3 llama8b bs=8 B=80] max abs err = 7.715e-03
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[80-8-qwen1.5b] 
+[step3 qwen1.5b bs=8 B=80] max abs err = 7.528e-03
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[80-16-llama8b] 
+[step3 llama8b bs=16 B=80] max abs err = 3.672e-03
+PASSED
+tests/kernels/test_gpu.py::test_step3_port_no_mask[80-16-qwen1.5b] 
+[step3 qwen1.5b bs=16 B=80] max abs err = 2.643e-03
+PASSED
+tests/kernels/test_gpu.py::test_step4_ct_mask[1-8-llama8b] 
+[step4 vs reference llama8b bs=8 B=1] max abs err = 1.201e-03
+
+[step4 vs dense llama8b bs=8 B=1] max abs err = 1.201e-03
+  slots/live = 480/206
+PASSED
+tests/kernels/test_gpu.py::test_step4_ct_mask[1-8-qwen1.5b] 
+[step4 vs reference qwen1.5b bs=8 B=1] max abs err = 9.855e-04
+
+[step4 vs dense qwen1.5b bs=8 B=1] max abs err = 9.855e-04
+  slots/live = 480/206
+PASSED
+tests/kernels/test_gpu.py::test_step4_ct_mask[1-16-llama8b] 
+[step4 vs reference llama8b bs=16 B=1] max abs err = 1.284e-03
+
+[step4 vs dense llama8b bs=16 B=1] max abs err = 1.284e-03
+  slots/live = 496/206
+PASSED
+tests/kernels/test_gpu.py::test_step4_ct_mask[1-16-qwen1.5b] 
+[step4 vs reference qwen1.5b bs=16 B=1] max abs err = 1.635e-03
+
+[step4 vs dense qwen1.5b bs=16 B=1] max abs err = 1.635e-03
+  slots/live = 496/206
+PASSED
+tests/kernels/test_gpu.py::test_step4_ct_mask[80-8-llama8b] 
+[step4 vs reference llama8b bs=8 B=80] max abs err = 2.495e-03
+
+[step4 vs dense llama8b bs=8 B=80] max abs err = 2.495e-03
+  slots/live = 38400/16480
+PASSED
+tests/kernels/test_gpu.py::test_step4_ct_mask[80-8-qwen1.5b] 
+[step4 vs reference qwen1.5b bs=8 B=80] max abs err = 2.361e-03
+
+[step4 vs dense qwen1.5b bs=8 B=80] max abs err = 2.361e-03
+  slots/live = 38400/16480
+PASSED
+tests/kernels/test_gpu.py::test_step4_ct_mask[80-16-llama8b] 
+[step4 vs reference llama8b bs=16 B=80] max abs err = 2.128e-03
+
+[step4 vs dense llama8b bs=16 B=80] max abs err = 2.128e-03
+  slots/live = 39680/16480
+PASSED
+tests/kernels/test_gpu.py::test_step4_ct_mask[80-16-qwen1.5b] 
+[step4 vs reference qwen1.5b bs=16 B=80] max abs err = 2.024e-03
+
+[step4 vs dense qwen1.5b bs=16 B=80] max abs err = 2.024e-03
+  slots/live = 39680/16480
+PASSED
+tests/kernels/test_gpu.py::test_step4_permutation[llama8b] 
+[V2 permutation llama8b] max abs err = 1.953e-03
+PASSED
+tests/kernels/test_gpu.py::test_step4_permutation[qwen1.5b] 
+[V2 permutation qwen1.5b] max abs err = 1.953e-03
+PASSED
+tests/kernels/test_gpu.py::test_copy_slots PASSED
+tests/kernels/test_gpu.py::test_gather_attention[llama8b] 
+[gather llama8b] max abs err = 1.838e-03
+PASSED
+tests/kernels/test_gpu.py::test_gather_attention[qwen1.5b] 
+[gather qwen1.5b] max abs err = 1.207e-03
+PASSED
+tests/kernels/test_reference.py::test_V5_paged_matches_dense[8] PASSED
+tests/kernels/test_reference.py::test_V5_paged_matches_dense[16] PASSED
+tests/kernels/test_reference.py::test_attention_gqa_head_mapping PASSED
+tests/kernels/test_workload.py::test_rules[small] PASSED
+tests/kernels/test_workload.py::test_rules[paper] PASSED
+tests/kernels/test_workload.py::test_deterministic PASSED
+tests/kernels/test_workload.py::test_V5_on_workload[8] PASSED
+tests/kernels/test_workload.py::test_V5_on_workload[16] PASSED
+
+============================= 44 passed in 18.20s ==============================

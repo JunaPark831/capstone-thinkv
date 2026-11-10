@@ -1,0 +1,30 @@
+llama8b B=1 fullkv: attn 0.0174 ms, evict 0회 0.00 ms, step 0.557 ms
+llama8b B=1 gather: attn 0.0123 ms, evict 20회 1.12 ms, step 0.428 ms
+llama8b B=1 ct: attn 0.0143 ms, evict 20회 0.24 ms, step 0.466 ms
+llama8b B=8 fullkv: attn 0.0655 ms, evict 0회 0.00 ms, step 2.097 ms
+llama8b B=8 gather: attn 0.0348 ms, evict 20회 0.56 ms, step 1.132 ms
+llama8b B=8 ct: attn 0.0417 ms, evict 20회 0.26 ms, step 1.344 ms
+qwen1.5b B=1 fullkv: attn 0.0123 ms, evict 0회 0.00 ms, step 0.344 ms
+qwen1.5b B=1 gather: attn 0.0092 ms, evict 20회 1.03 ms, step 0.286 ms
+qwen1.5b B=1 ct: attn 0.0102 ms, evict 20회 0.23 ms, step 0.293 ms
+qwen1.5b B=8 fullkv: attn 0.0237 ms, evict 0회 0.00 ms, step 0.663 ms
+qwen1.5b B=8 gather: attn 0.0156 ms, evict 20회 0.48 ms, step 0.450 ms
+qwen1.5b B=8 ct: attn 0.0193 ms, evict 20회 0.26 ms, step 0.548 ms
+
+| 모델 | 배치 | 경로 | 방식 | attn ms | 축출 ms/스텝 | 스텝 ms (×층) | 축출 스텝 정지 ms (×층) | 훑는 슬롯/살아 있는 토큰 | KV MB | CT 대비 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| llama8b | 1 | 3D | fullkv | 0.0174 | 0.00000 | 0.557 | 0.000 | 1152/1152 | 4.5 | 1.19× |
+| llama8b | 1 | 3D | gather | 0.0123 | 0.00109 | 0.428 | 1.793 | 496/496 | 4.0 | 0.92× |
+| llama8b | 1 | 3D | ct | 0.0143 | 0.00023 | 0.466 | 0.382 | 632/496 | 2.5 | 1.00× |
+| llama8b | 8 | 3D | fullkv | 0.0655 | 0.00000 | 2.097 | 0.000 | 9216/9216 | 36.0 | 1.56× |
+| llama8b | 8 | 3D | gather | 0.0348 | 0.00054 | 1.132 | 0.893 | 3968/3968 | 32.2 | 0.84× |
+| llama8b | 8 | 3D | ct | 0.0417 | 0.00026 | 1.344 | 0.423 | 5056/3968 | 19.8 | 1.00× |
+| qwen1.5b | 1 | 3D | fullkv | 0.0123 | 0.00000 | 0.344 | 0.000 | 1152/1152 | 1.1 | 1.17× |
+| qwen1.5b | 1 | 3D | gather | 0.0092 | 0.00100 | 0.286 | 1.440 | 496/496 | 1.0 | 0.98× |
+| qwen1.5b | 1 | 3D | ct | 0.0102 | 0.00023 | 0.293 | 0.329 | 632/496 | 0.6 | 1.00× |
+| qwen1.5b | 8 | 3D | fullkv | 0.0237 | 0.00000 | 0.663 | 0.000 | 9216/9216 | 9.0 | 1.21× |
+| qwen1.5b | 8 | 3D | gather | 0.0156 | 0.00047 | 0.450 | 0.677 | 3968/3968 | 8.1 | 0.82× |
+| qwen1.5b | 8 | 3D | ct | 0.0193 | 0.00026 | 0.548 | 0.369 | 5056/3968 | 4.9 | 1.00× |
+
+CT 대비 = 그 방식의 스텝 ms ÷ CT 스텝 ms (1보다 크면 CT가 빠르다). 스텝 ms는 축출 비용을 전체 스텝에 나눈 평균이고,
+축출 스텝 정지 = 축출이 일어나는 그 스텝에 한 번에 더해지는 시간(층 수 × 이벤트 평균)이다.

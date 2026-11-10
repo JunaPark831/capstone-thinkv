@@ -1,0 +1,54 @@
+llama8b B=1 fullkv: attn 0.0638 ms, evict 0회 0.00 ms, step 2.042 ms
+llama8b B=1 gather: attn 0.0154 ms, evict 86회 2.32 ms, step 0.501 ms
+llama8b B=1 ct: attn 0.0190 ms, evict 86회 0.96 ms, step 0.612 ms
+llama8b B=8 fullkv: attn 0.3594 ms, evict 0회 0.00 ms, step 11.502 ms
+llama8b B=8 gather: attn 0.0573 ms, evict 86회 3.54 ms, step 1.849 ms
+llama8b B=8 ct: attn 0.0696 ms, evict 86회 1.09 ms, step 2.232 ms
+llama8b B=32 fullkv: attn 1.2061 ms, evict 0회 0.00 ms, step 38.596 ms
+llama8b B=32 gather: attn 0.1935 ms, evict 86회 24.66 ms, step 6.289 ms
+llama8b B=32 ct: attn 0.2324 ms, evict 86회 1.24 ms, step 7.443 ms
+llama8b B=64 fullkv: attn 2.3409 ms, evict 0회 0.00 ms, step 74.908 ms
+llama8b B=64 gather: attn 0.3338 ms, evict 86회 47.97 ms, step 10.870 ms
+llama8b B=64 ct: attn 0.4041 ms, evict 86회 1.29 ms, step 12.936 ms
+qwen1.5b B=1 fullkv: attn 0.0399 ms, evict 0회 0.00 ms, step 1.118 ms
+qwen1.5b B=1 gather: attn 0.0113 ms, evict 86회 2.32 ms, step 0.323 ms
+qwen1.5b B=1 ct: attn 0.0133 ms, evict 86회 0.99 ms, step 0.376 ms
+qwen1.5b B=8 fullkv: attn 0.1096 ms, evict 0회 0.00 ms, step 3.068 ms
+qwen1.5b B=8 gather: attn 0.0215 ms, evict 86회 2.10 ms, step 0.609 ms
+qwen1.5b B=8 ct: attn 0.0254 ms, evict 86회 1.13 ms, step 0.715 ms
+qwen1.5b B=32 fullkv: attn 0.3553 ms, evict 0회 0.00 ms, step 9.949 ms
+qwen1.5b B=32 gather: attn 0.0584 ms, evict 86회 3.82 ms, step 1.647 ms
+qwen1.5b B=32 ct: attn 0.0707 ms, evict 86회 1.21 ms, step 1.983 ms
+qwen1.5b B=64 fullkv: attn 0.6565 ms, evict 0회 0.00 ms, step 18.383 ms
+qwen1.5b B=64 gather: attn 0.1077 ms, evict 86회 13.39 ms, step 3.061 ms
+qwen1.5b B=64 ct: attn 0.1300 ms, evict 86회 1.33 ms, step 3.646 ms
+
+| 모델 | 배치 | 경로 | 방식 | attn ms | 축출 ms/스텝 | 스텝 ms (×층) | 축출 스텝 정지 ms (×층) | 훑는 슬롯/살아 있는 토큰 | KV MB | CT 대비 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| llama8b | 1 | 3D | fullkv | 0.0638 | 0.00000 | 2.042 | 0.000 | 8320/8320 | 32.5 | 3.34× |
+| llama8b | 1 | 3D | gather | 0.0154 | 0.00028 | 0.501 | 0.864 | 976/976 | 8.0 | 0.82× |
+| llama8b | 1 | 3D | ct | 0.0190 | 0.00012 | 0.612 | 0.356 | 1232/976 | 4.8 | 1.00× |
+| llama8b | 8 | 3D | fullkv | 0.3594 | 0.00000 | 11.502 | 0.000 | 66560/66560 | 260.0 | 5.15× |
+| llama8b | 8 | 3D | gather | 0.0573 | 0.00043 | 1.849 | 1.317 | 7808/7808 | 64.2 | 0.83× |
+| llama8b | 8 | 3D | ct | 0.0696 | 0.00013 | 2.232 | 0.407 | 9856/7808 | 38.5 | 1.00× |
+| llama8b | 32 | 2D | fullkv | 1.2061 | 0.00000 | 38.596 | 0.000 | 266240/266240 | 1040.0 | 5.19× |
+| llama8b | 32 | 2D | gather | 0.1935 | 0.00301 | 6.289 | 9.178 | 31232/31232 | 257.0 | 0.85× |
+| llama8b | 32 | 2D | ct | 0.2324 | 0.00015 | 7.443 | 0.461 | 39424/31232 | 154.0 | 1.00× |
+| llama8b | 64 | 2D | fullkv | 2.3409 | 0.00000 | 74.908 | 0.000 | 532480/532480 | 2080.0 | 5.79× |
+| llama8b | 64 | 2D | gather | 0.3338 | 0.00586 | 10.870 | 17.850 | 62464/62464 | 514.0 | 0.84× |
+| llama8b | 64 | 2D | ct | 0.4041 | 0.00016 | 12.936 | 0.479 | 78848/62464 | 308.0 | 1.00× |
+| qwen1.5b | 1 | 3D | fullkv | 0.0399 | 0.00000 | 1.118 | 0.000 | 8320/8320 | 8.1 | 2.97× |
+| qwen1.5b | 1 | 3D | gather | 0.0113 | 0.00028 | 0.323 | 0.756 | 976/976 | 2.0 | 0.86× |
+| qwen1.5b | 1 | 3D | ct | 0.0133 | 0.00012 | 0.376 | 0.323 | 1232/976 | 1.2 | 1.00× |
+| qwen1.5b | 8 | 3D | fullkv | 0.1096 | 0.00000 | 3.068 | 0.000 | 66560/66560 | 65.0 | 4.29× |
+| qwen1.5b | 8 | 3D | gather | 0.0215 | 0.00026 | 0.609 | 0.685 | 7808/7808 | 16.1 | 0.85× |
+| qwen1.5b | 8 | 3D | ct | 0.0254 | 0.00014 | 0.715 | 0.368 | 9856/7808 | 9.6 | 1.00× |
+| qwen1.5b | 32 | 3D | fullkv | 0.3553 | 0.00000 | 9.949 | 0.000 | 266240/266240 | 260.0 | 5.02× |
+| qwen1.5b | 32 | 3D | gather | 0.0584 | 0.00047 | 1.647 | 1.243 | 31232/31232 | 64.2 | 0.83× |
+| qwen1.5b | 32 | 3D | ct | 0.0707 | 0.00015 | 1.983 | 0.394 | 39424/31232 | 38.5 | 1.00× |
+| qwen1.5b | 64 | 3D | fullkv | 0.6565 | 0.00000 | 18.383 | 0.000 | 532480/532480 | 520.0 | 5.04× |
+| qwen1.5b | 64 | 3D | gather | 0.1077 | 0.00163 | 3.061 | 4.358 | 62464/62464 | 128.5 | 0.84× |
+| qwen1.5b | 64 | 3D | ct | 0.1300 | 0.00016 | 3.646 | 0.432 | 78848/62464 | 77.0 | 1.00× |
+
+CT 대비 = 그 방식의 스텝 ms ÷ CT 스텝 ms (1보다 크면 CT가 빠르다). 스텝 ms는 축출 비용을 전체 스텝에 나눈 평균이고,
+축출 스텝 정지 = 축출이 일어나는 그 스텝에 한 번에 더해지는 시간(층 수 × 이벤트 평균)이다.
