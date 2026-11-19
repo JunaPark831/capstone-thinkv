@@ -1,50 +1,67 @@
-# HANDOFF — ThinKV 재현 (kvpress)
+# HANDOFF — ThinKV 재현과 온디바이스 구현
 
-마지막 갱신: 2026-10-01
+마지막 갱신: 2026-11-20 (그 전 판은 2026-10-01, 0단계 직후)
 
 ## 지금 상태
 
-**0단계(환경 + FullKV 기준선) 완료. 다음은 1단계(희소도 3봉 확인, E3, 분기점 A).** 1단계 안내서는 `docs/stage1.html`(볼트에도 같은 파일). 1단계 코드는 아직 한 줄도 없다.
+**Mac에서 할 수 있는 일은 끝났다. 다음은 보드(VENTUNO Q) 실행과 측정이고, 보드 담당 팀원이 한다.** 진행 현황과 결과 요약은 `README.md`가 정본이다.
+
+| 단계 | 상태 | 정본 문서 |
+|---|---|---|
+| 0. 환경과 기준선 | 완료 | 이 문서 아래 "0단계 기록" |
+| 1. 희소도 3봉 확인 | 완료. 미리 정한 기준과 논문 Algorithm 1 모두에서 3봉이 나오지 않았다 | `docs/e3_branch_a_criteria.md`, `docs/e3_branch_a_2type_fallback.md`, `docs/e3_paper_calibration_spec.md` |
+| 2. 사고 유형 분류기 | 완료. 대체 임계값 사용 | `docs/e4_implementation_guide.md` |
+| 3. TBQ + TBE | 구현 완료. 평가는 AIME 2024 10문제를 한 번씩만 돌렸다 | `docs/e4_tbe_tbq_design.md`, `thinkv/result/` |
+| 4. CT 커널 벤치마크 | 1차 측정 완료(RTX 4090) | `docs/e10_ct_kernel_design.md` 9절 |
+| 5. 온디바이스 구현 | 완료. `ondevice/tests` 19개 통과(8B, Mac) | `docs/ondevice_npu_cpu_design.md`, `ondevice/HANDOFF.md` |
+| 6. 보드 실행과 측정 | 예정 | `ondevice/README.md` |
 
 ## 관련 문서
 
-리포 안:
-
 | 파일 | 내용 |
 |---|---|
-| `docs/stage0.html` | 0단계 안내서 사본(볼트 원본 그대로). 실제 구현과 다른 곳은 아래 "검증한 사실"이 정본 |
-| `docs/stage1.html` | 1단계 안내서. 희소도 정의, 수집·분석 스크립트 설계, 검증한 코드 조각, 분기점 A 판정, 완료 체크리스트 |
+| `README.md` | 진행 현황, 단계별 결과, 다이어그램 |
+| `docs/ondevice_npu_cpu_design.md` | 보드용 NPU + CPU 분업 설계, 결정 사항, Mac 실측, 백로그 |
+| `ondevice/HANDOFF.md` | 온디바이스 코드 작업 규칙과 확정 사항 |
+| `ondevice/README.md` | 보드 담당 팀원용 실행·측정 안내 |
+| `docs/e10_ct_kernel_design.md` | CT 커널 설계와 벤치마크 결과, 백로그 |
+| `docs/e3_*.md`, `docs/e4_*.md` | 희소도 분석과 TBQ·TBE 설계 |
+| `docs/stage0.html`, `docs/stage1.html` | 0·1단계 안내서 |
 
-Obsidian 볼트 `캡스톤디자인/`:
-
-| 문서 | 내용 |
-|---|---|
-| `version2/구현/ThinKV 구현 계획.md` | 전체 설계의 기준. 부품별 설계(§3), 실험 매트릭스 E0~E11(§4), 코드 구조(§5) |
-| `version2/구현/v2 로드맵.md` | 주 단위 일정, 분기점 A·B·C |
-| `version2/구현/ThinKV 0단계 — 환경과 FullKV 기준선.html` | 0단계 안내서 원본 |
-| `version2/구현/ThinKV 1단계 — 희소도 3봉 확인.html` | 1단계 안내서 (`docs/stage1.html`과 같은 파일) |
-| `version2/프레임워크/kvpress.md` | kvpress 조사 노트. `DecodingPress` 동작, 함정 목록 |
-| `version1/번역/논문2 한국어 완역 - ThinKV.md` | 논문 번역. Algorithm 1은 509행 근처, 희소도 정의는 각주 2 |
+설계의 기준은 Obsidian 볼트 `캡스톤디자인/version2/구현/ThinKV 구현 계획.md`다. 계획과 달라지면 계획서에 이유와 날짜를 적는다.
 
 ## 환경
 
-- 머신: Apple M5 Pro, 48GB, NVIDIA GPU 없음 → 장치는 MPS
-- 가상환경: `.venv-kvpress` (Python 3.12.13). 루트의 `.venv`는 torch도 없는 빈 환경이라 쓰지 않는다.
-- 버전: torch 2.14.0, transformers 5.2.0, kvpress 0.5.5, math-verify 0.9.0, datasets 5.0.1, scipy 1.18.1, matplotlib 3.11.2, pandas 2.3.3
-- 모델: `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B`, bf16. 28층, 쿼리 헤드 12, KV 헤드 2
-- 데이터: 평가 `alessiodevoto/math500`(split `test`), 캘리브레이션 `simplescaling/s1K-1.1`(split `train`)
-- git: `main`에 첫 커밋(2026-10-01). `.venv*`, `__pycache__`, `.DS_Store`는 `.gitignore`
+- 로컬: Apple Silicon Mac(48GB), NVIDIA GPU 없음. 가상환경은 `.venv-kvpress`(Python 3.12).
+- GPU: vast.ai에서 빌려 쓴다(희소도 수집은 A100, CT 커널 벤치마크는 RTX 4090).
+- 보드: Arduino VENTUNO Q(Qualcomm IQ-8275, RAM 16GB).
+- 모델: 지금은 `deepseek-ai/DeepSeek-R1-Distill-Llama-8B`(32층, 쿼리 헤드 32, KV 헤드 8, 헤드 차원 128). 0단계는 R1-Distill-Qwen-1.5B로 했다.
+- git: 작업 브랜치 `e10-ct-kernel`, 2026-11-20에 `main`에 합쳤다. 저장소는 공개다.
 
 ## 코드
 
-| 파일 | 역할 |
+| 폴더 | 역할 |
 |---|---|
-| `eval/baseline.py` | MATH-500 앞 10문제를 press별로 생성·채점. 결과 `results/baseline_<press>.jsonl` |
-| `eval/compare.py` | 결과 JSONL을 모두 읽어 요약표 출력 + `results/compare.png`(생성 길이·KV 캐시·속도 3칸) |
+| `eval/` | 0단계 기준선 실행과 비교 |
+| `calib/` | 희소도 수집, 봉우리 분석, 분류 임계값 산출물 |
+| `thinkv/` | TBQ(`quant.py`, 값을 양자화한 뒤 16비트로 되돌려 저장), TBE(`press.py`), K-means, 평가 러너 |
+| `kernels/`, `tests/kernels/` | 블록 장부(`block_table.py`), vLLM Triton 커널 이식, 벤치마크 |
+| `ondevice/` | 보드용 구현: 진짜 2·4비트 저장, C++ 어텐션, NPU 조각, 테스트 |
 
-실행은 프로젝트 루트에서 `.venv-kvpress/bin/python eval/baseline.py`, 그다음 `eval/compare.py`.
+## 다음 할 일
 
-## 0단계 결과 (2026-09-30 ~ 10-01)
+1. **보드 실행과 측정**(보드 담당 팀원). 조각을 NPU용으로 컴파일하고, 속도와 메모리를 잰다. 순서는 `ondevice/README.md`.
+2. **NPU 호출 왕복 시간 확인.** 토큰당 33번 호출을 감당하지 못하면 가중치 계산도 CPU로 옮기는 방안을 검토한다(2026-11-17 팀원 제안, 미결).
+3. **백로그**(착수 조건은 각 문서):
+   - 퇴출 때 다시 묶어 재양자화하기, 1B급 모델 + 무압축 KV 대 8B + ThinKV 비교 (`docs/ondevice_npu_cpu_design.md` 11절)
+   - 논문과의 차이 정리, 가중치·활성값·KV 정밀도별 prefill·decode 속도 측정 (`docs/e10_ct_kernel_design.md` 10·11절)
+4. **열려 있는 것**: TBQ + TBE 평가는 10문제뿐이라 결론을 낼 수 없다. 균일 2비트·균일 4비트·TBQ만 설정은 실행이 오염되어 다시 돌려야 한다(`thinkv/result/`의 `.contaminated`).
+
+## 0단계 기록 (2026-10-01 기준, 그대로 보존)
+
+아래 세 절(결과, 검증한 사실, 결정 사항)은 0단계 때 쓴 것이고 R1-Distill-Qwen-1.5B 기준이다.
+
+### 0단계 결과 (2026-09-30 ~ 10-01)
 
 설정: MATH-500 앞 10문제, 시드 0, 샘플 1, `max_new_tokens=8000`, temperature 0.6, top_p 0.95. knorm = `DecodingPress(KnormPress(), compression_interval=512, target_size=1024)`.
 
@@ -62,7 +79,7 @@ Obsidian 볼트 `캡스톤디자인/`:
 - **none 속도 두 개는 오염됐다.** `algebra/2584`(33.2)와 `number_theory/572`(34.4)는 같은 시각에 어시스턴트가 같은 GPU로 스모크 테스트를 돌렸다. 속도 비교에서 빼거나 중앙값을 쓴다.
 - none 재실행의 요약 수치(9/10, 생성 길이 935/2769/8000)는 옛 `baseline.jsonl`과 같았다. 옛 파일은 지웠다.
 
-## 검증한 사실
+### 검증한 사실
 
 - **MPS에서 kvpress 디코드 압축이 동작한다.** 테스트 값(32스텝마다 64개)으로 1문제 300토큰: none 캐시 369, knorm 캐시 75.
 - **FullKV 캐시 길이 = 입력 길이 + 생성 길이 − 1.** 마지막으로 뽑은 토큰은 다시 모델에 들어가지 않는다.
@@ -78,7 +95,7 @@ Obsidian 볼트 `캡스톤디자인/`:
   - `simplescaling/s1K-1.1`은 1000문제, `cot_type`이 math 877 / science 108 / crossword 15.
   - `gaussian_kde` + `find_peaks(prominence=0.05)`: 인위적 1봉 데이터가 `bw=0.1`에서 2봉으로 잡혔다. 폭 여러 개로 확인해야 한다.
 
-## 결정 사항
+### 결정 사항
 
 | 결정 | 이유 |
 |---|---|
@@ -95,29 +112,6 @@ Obsidian 볼트 `캡스톤디자인/`:
 | (1단계 제안) 수집 `calib/collect_sparsity.py`와 분석 `calib/calibrate.py`를 나눈다 | KDE 폭을 바꿔 분석을 여러 번 돌려야 하는데 생성을 다시 할 수 없다. 계획서 §5는 한 파일이라, 채택하면 계획서에 적는다 |
 | (1단계 제안) 캘리브레이션은 s1K math, 평가는 MATH-500 | 캘리브레이션과 평가 데이터가 겹치지 않게 |
 
-## 다음 할 일
-
-### 1. 1단계 — 희소도 3봉 확인 (E3, 분기점 A)
-
-`docs/stage1.html`을 따라간다. 순서만 요약:
-
-1. **분기점 A 판정 기준을 결과 보기 전에 계획서에 적는다**(예: 3봉 비율 50% 이상인 층이 4개 이상, KDE 폭 세 가지에서 유지).
-2. `calib/collect_sparsity.py`: eager 로드, kvpress import 금지, `self_attn` hook으로 스텝별 희소도 `(28, gen_len − 1)` 수집, 문제마다 `calib/sparsity/{idx:04d}.pt`(희소도 + `token_ids`)로 저장. P=1(300토큰)로 모양 확인 → P=10(약 20~30분).
-3. `calib/calibrate.py`: 층별 KDE → 3봉 층 → L* 4개 → 골 평균 θ₁·θ₂ → `calib/calib.json`. 그림 두 장(28층 KDE = E3 그림, 그림 3 재현).
-4. 분기점 A 판정을 구현 계획·로드맵에 기록. 3봉이면 P=100(약 3~4시간)으로 최종 `calib.json`.
-
-로드맵상 W2(9/23~9/29) 항목이라 이미 밀려 있다.
-
-### 2. 병행
-
-- **GPU 서버 결정.** Mac 속도(초당 약 44토큰)로는 E0 설정(MATH-500 × 시드 3 × 샘플 8, 16k)이 불가능하다. 24GB급 NVIDIA GPU. 로드맵 "실험 GPU 확정" 미정.
-- **E3′ 키워드 베이스라인**(로드맵 W2): 1단계에서 저장한 `token_ids`를 재사용한다.
-- (선택) knorm이 8000까지 간 이유를 보려면 생성 텍스트를 저장해야 한다. 지금 `baseline.py`는 텍스트를 남기지 않는다.
-
-### 3. 이후
-
-2단계 온라인 분류기 → 3단계 TBE → 4단계 TBQ(fake-quant) → 5단계 조립·재현 판정(E4~E6) → 6단계 CT 커널(Triton, GPU 필수). 완료 기준은 구현 계획 §3.
-
 ## 함정
 
 - `import kvpress`는 전역 어텐션 패치. 캘리브레이션(1단계)과 none 실행에서는 import하지 않는다.
@@ -132,5 +126,6 @@ Obsidian 볼트 `캡스톤디자인/`:
 
 ## 작업 방식
 
-- 코드는 사용자가 직접 작성한다. 어시스턴트는 변경안을 제시하고 임시 복사본에서 실행해 검증한다. 예외는 사용자가 명시적으로 맡긴 파일뿐이다(2026-10-01: `eval/compare.py`는 어시스턴트가 작성. 2026-11-11: E10 `kernels/`·`tests/kernels/` 전체는 어시스턴트가 작성하고 사용자가 점검 — 교수님 미팅 일정 때문).
+- 2026-11-19부터 `ondevice/` 코드는 구현 세션이 직접 쓰고, 단계마다 흐름 설명 → 코드 → 테스트 순서로 사용자와 짚어 간다. 그 전에는 사용자가 직접 옮겨 적었다.
+- 스펙 문서와 커밋은 설계 세션이 맡는다. 커밋·푸시는 사용자가 시킬 때 한다.
 - 설계 판단은 Obsidian의 `ThinKV 구현 계획.md`를 기준으로 한다. 계획과 달라지면 계획서에 이유와 날짜를 적는다.
