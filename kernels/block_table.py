@@ -124,3 +124,4 @@ def pad_block_tables(rows, bs, pad_to=64) -> torch.Tensor:
     for i, r in enumerate(rows):
         bt[i, : len(r)] = r
     return torch.from_numpy(bt)
+
