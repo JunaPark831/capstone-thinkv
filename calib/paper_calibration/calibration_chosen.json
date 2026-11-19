@@ -1,0 +1,142 @@
+{
+ "name": "single-prompt 3-peak calibration (#7)",
+ "status": "confirmed by user 2026-11-04",
+ "sparsity_definition": {
+  "channel": "win256_mid@max1",
+  "positions": "max(4, g-255) .. g-8 (sink block 0-3 and last 8 incl. self excluded)",
+  "rule": "paper eq.2-4 (query-head max-pool pre-softmax -> softmax over the position set -> KV-group mean) then fraction of positions < 1% of row max",
+  "model": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+  "attention": "eager"
+ },
+ "L_star": [
+  24
+ ],
+ "theta": [
+  0.29549902152641877,
+  0.4931506849315068
+ ],
+ "labels_low_to_high": [
+  "Execution",
+  "Reasoning",
+  "Transition"
+ ],
+ "tau": 128,
+ "decode_rule": "phi = mean sparsity over L_star; classify each 128-step block by its mean phi against theta",
+ "derivation": {
+  "source_prompt": "0012",
+  "peaks": [
+   0.25440313111545987,
+   0.4344422700587084,
+   0.5675146771037182
+  ],
+  "valleys": [
+   0.29549902152641877,
+   0.4931506849315068
+  ],
+  "basin_shares": [
+   0.3227063900877071,
+   0.27015174718084367,
+   0.40714186273144926
+  ],
+  "peak_rule": "KDE gaussian Scott x1, 512 grid; peaks by basin mass >= 2%, distance >= 0.05 (R3)",
+  "valley_depth": [
+   0.0032271179145335616,
+   0.014689965763065138
+  ],
+  "rho_step": 0.24919034700309514,
+  "note": "single prompt, single layer; valleys are shallow; mechanism unknown; not the paper's Algorithm 1"
+ },
+ "decode_sim_9_prompts": {
+  "0000": {
+   "blocks": 42,
+   "frac_E_R_T": [
+    0.42857142857142855,
+    0.5238095238095238,
+    0.047619047619047616
+   ],
+   "switch_rate": 0.36585365853658536
+  },
+  "0001": {
+   "blocks": 255,
+   "frac_E_R_T": [
+    0.23137254901960785,
+    0.7607843137254902,
+    0.00784313725490196
+   ],
+   "switch_rate": 0.24803149606299213
+  },
+  "0002": {
+   "blocks": 221,
+   "frac_E_R_T": [
+    0.14027149321266968,
+    0.6968325791855203,
+    0.16289592760180996
+   ],
+   "switch_rate": 0.37272727272727274
+  },
+  "0003": {
+   "blocks": 103,
+   "frac_E_R_T": [
+    0.1941747572815534,
+    0.7669902912621359,
+    0.038834951456310676
+   ],
+   "switch_rate": 0.2549019607843137
+  },
+  "0004": {
+   "blocks": 46,
+   "frac_E_R_T": [
+    0.43478260869565216,
+    0.5217391304347826,
+    0.043478260869565216
+   ],
+   "switch_rate": 0.4888888888888889
+  },
+  "0005": {
+   "blocks": 154,
+   "frac_E_R_T": [
+    0.12337662337662338,
+    0.7467532467532467,
+    0.12987012987012986
+   ],
+   "switch_rate": 0.3660130718954248
+  },
+  "0006": {
+   "blocks": 94,
+   "frac_E_R_T": [
+    0.14893617021276595,
+    0.7127659574468085,
+    0.13829787234042554
+   ],
+   "switch_rate": 0.3655913978494624
+  },
+  "0009": {
+   "blocks": 10,
+   "frac_E_R_T": [
+    0.8,
+    0.2,
+    0.0
+   ],
+   "switch_rate": 0.3333333333333333
+  },
+  "0012": {
+   "blocks": 112,
+   "frac_E_R_T": [
+    0.08035714285714286,
+    0.6517857142857143,
+    0.26785714285714285
+   ],
+   "switch_rate": 0.36936936936936937
+  }
+ },
+ "overall_frac_E_R_T": [
+  0.1909353905496625,
+  0.703953712632594,
+  0.1051108968177435
+ ],
+ "precision_map_paper_D3": {
+  "Reasoning": "FP8 (E4M3)",
+  "Execution": "NVFP4 (group 16)",
+  "Transition": "Ternary 2-bit; first to evict"
+ }
+}

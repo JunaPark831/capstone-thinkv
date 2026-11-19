@@ -1,0 +1,13 @@
+replay legacy vs stored: max|diff| 0.0002442002296447754 mean|diff| 0.00012190923007437959
+per-layer corr min/median 0.9990331530570984 0.9999432563781738
+regression vs prev (variants 0-3): max|diff| 0.000244140625 mean|diff| 0.0001220532285515219
+elapsed s 494
+legacy_perhead     mean 0.980  min 0.005  max 1.000  frac>0.98 0.753
+paper              mean 0.975  min 0.000  max 1.000  frac>0.98 0.675
+pergroup_maxpool   mean 0.970  min 0.001  max 1.000  frac>0.98 0.616
+headavg_nomax      mean 0.986  min 0.000  max 1.000  frac>0.98 0.827
+paper_nosink       mean 0.852  min 0.000  max 0.999  frac>0.98 0.073
+paper_win256       mean 0.639  min 0.000  max 0.992  frac>0.98 0.001
+paper_win1024      mean 0.895  min 0.000  max 0.999  frac>0.98 0.106
+sink_mass          mean 0.612  min 0.000  max 0.953  frac>0.98 0.000
+exit=0

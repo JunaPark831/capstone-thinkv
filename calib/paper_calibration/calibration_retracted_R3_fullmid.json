@@ -1,0 +1,456 @@
+{
+ "rule": {
+  "kde": "gaussian Scott x1, 512 grid",
+  "peaks": "mass>=0.02, distance>=0.05, no height condition (R3)"
+ },
+ "tau": 128,
+ "labels_low_to_high": [
+  "Execution",
+  "Reasoning",
+  "Transition"
+ ],
+ "source_dir": "calib/sparsity/s1k_llama8b_p15_masked",
+ "prompts": [
+  "0000",
+  "0001",
+  "0002",
+  "0003",
+  "0004",
+  "0005",
+  "0006",
+  "0009",
+  "0012"
+ ],
+ "calibrations": {
+  "primary": {
+   "channel": "full_mid@max1",
+   "range": "positions 4..g-8 (sink block 0-3 and last 8 excluded)",
+   "L_star": [
+    5,
+    24
+   ],
+   "theta": [
+    0.32583333333333336,
+    0.5623
+   ],
+   "pairs": [
+    {
+     "layer": 5,
+     "prompt": "0004",
+     "peaks": [
+      0.1937,
+      0.411,
+      0.9452
+     ],
+     "valleys": [
+      0.2172,
+      0.4423
+     ]
+    },
+    {
+     "layer": 5,
+     "prompt": "0006",
+     "peaks": [
+      0.1683,
+      0.4207,
+      0.9746
+     ],
+     "valleys": [
+      0.2779,
+      0.4775
+     ]
+    },
+    {
+     "layer": 5,
+     "prompt": "0012",
+     "peaks": [
+      0.3386,
+      0.7162,
+      0.9804
+     ],
+     "valleys": [
+      0.456,
+      0.728
+     ]
+    },
+    {
+     "layer": 24,
+     "prompt": "0005",
+     "peaks": [
+      0.3738,
+      0.5675,
+      0.9785
+     ],
+     "valleys": [
+      0.4207,
+      0.5949
+     ]
+    },
+    {
+     "layer": 24,
+     "prompt": "0009",
+     "peaks": [
+      0.1468,
+      0.4755,
+      0.7828
+     ],
+     "valleys": [
+      0.3875,
+      0.6262
+     ]
+    },
+    {
+     "layer": 24,
+     "prompt": "0012",
+     "peaks": [
+      0.1018,
+      0.4736,
+      0.9746
+     ],
+     "valleys": [
+      0.1957,
+      0.5049
+     ]
+    }
+   ],
+   "n_pairs": 6,
+   "decode_sim": {
+    "0000": {
+     "blocks": 42,
+     "frac_E_R_T": [
+      0.0,
+      0.14285714285714285,
+      0.8571428571428571
+     ],
+     "switches": 3,
+     "first_block_E_R_T": [
+      null,
+      0,
+      5
+     ],
+     "last_nonT_block": 6
+    },
+    "0001": {
+     "blocks": 255,
+     "frac_E_R_T": [
+      0.011764705882352941,
+      0.0196078431372549,
+      0.9686274509803922
+     ],
+     "switches": 2,
+     "first_block_E_R_T": [
+      0,
+      3,
+      8
+     ],
+     "last_nonT_block": 7
+    },
+    "0002": {
+     "blocks": 221,
+     "frac_E_R_T": [
+      0.0,
+      0.01809954751131222,
+      0.9819004524886877
+     ],
+     "switches": 1,
+     "first_block_E_R_T": [
+      null,
+      0,
+      4
+     ],
+     "last_nonT_block": 3
+    },
+    "0003": {
+     "blocks": 103,
+     "frac_E_R_T": [
+      0.009708737864077669,
+      0.04854368932038835,
+      0.941747572815534
+     ],
+     "switches": 4,
+     "first_block_E_R_T": [
+      0,
+      1,
+      4
+     ],
+     "last_nonT_block": 7
+    },
+    "0004": {
+     "blocks": 46,
+     "frac_E_R_T": [
+      0.043478260869565216,
+      0.08695652173913043,
+      0.8695652173913043
+     ],
+     "switches": 2,
+     "first_block_E_R_T": [
+      0,
+      2,
+      6
+     ],
+     "last_nonT_block": 5
+    },
+    "0005": {
+     "blocks": 154,
+     "frac_E_R_T": [
+      0.012987012987012988,
+      0.025974025974025976,
+      0.961038961038961
+     ],
+     "switches": 4,
+     "first_block_E_R_T": [
+      0,
+      2,
+      5
+     ],
+     "last_nonT_block": 7
+    },
+    "0006": {
+     "blocks": 94,
+     "frac_E_R_T": [
+      0.02127659574468085,
+      0.031914893617021274,
+      0.9468085106382979
+     ],
+     "switches": 2,
+     "first_block_E_R_T": [
+      0,
+      2,
+      5
+     ],
+     "last_nonT_block": 4
+    },
+    "0009": {
+     "blocks": 10,
+     "frac_E_R_T": [
+      0.1,
+      0.5,
+      0.4
+     ],
+     "switches": 4,
+     "first_block_E_R_T": [
+      0,
+      1,
+      5
+     ],
+     "last_nonT_block": 8
+    },
+    "0012": {
+     "blocks": 112,
+     "frac_E_R_T": [
+      0.017857142857142856,
+      0.017857142857142856,
+      0.9642857142857143
+     ],
+     "switches": 2,
+     "first_block_E_R_T": [
+      0,
+      2,
+      4
+     ],
+     "last_nonT_block": 3
+    }
+   },
+   "overall_frac_E_R_T": [
+    0.01253616200578592,
+    0.03664416586306654,
+    0.9508196721311475
+   ]
+  },
+  "reference": {
+   "channel": "win1024@max1",
+   "range": "positions max(1,g-1023)..g",
+   "L_star": [
+    0
+   ],
+   "theta": [
+    0.5890333333333334,
+    0.7847333333333334
+   ],
+   "pairs": [
+    {
+     "layer": 0,
+     "prompt": "0003",
+     "peaks": [
+      0.6458,
+      0.7378,
+      0.863
+     ],
+     "valleys": [
+      0.6536,
+      0.8004
+     ]
+    },
+    {
+     "layer": 0,
+     "prompt": "0006",
+     "peaks": [
+      0.4932,
+      0.7495,
+      0.8669
+     ],
+     "valleys": [
+      0.5068,
+      0.8102
+     ]
+    },
+    {
+     "layer": 0,
+     "prompt": "0012",
+     "peaks": [
+      0.5538,
+      0.7162,
+      0.8787
+     ],
+     "valleys": [
+      0.6067,
+      0.7436
+     ]
+    }
+   ],
+   "n_pairs": 3,
+   "decode_sim": {
+    "0000": {
+     "blocks": 42,
+     "frac_E_R_T": [
+      0.11904761904761904,
+      0.8809523809523809,
+      0.0
+     ],
+     "switches": 1,
+     "first_block_E_R_T": [
+      0,
+      5,
+      null
+     ],
+     "last_nonT_block": 41
+    },
+    "0001": {
+     "blocks": 255,
+     "frac_E_R_T": [
+      0.01568627450980392,
+      0.984313725490196,
+      0.0
+     ],
+     "switches": 1,
+     "first_block_E_R_T": [
+      0,
+      4,
+      null
+     ],
+     "last_nonT_block": 254
+    },
+    "0002": {
+     "blocks": 221,
+     "frac_E_R_T": [
+      0.013574660633484163,
+      0.9683257918552036,
+      0.01809954751131222
+     ],
+     "switches": 9,
+     "first_block_E_R_T": [
+      0,
+      3,
+      80
+     ],
+     "last_nonT_block": 220
+    },
+    "0003": {
+     "blocks": 103,
+     "frac_E_R_T": [
+      0.038834951456310676,
+      0.9611650485436893,
+      0.0
+     ],
+     "switches": 1,
+     "first_block_E_R_T": [
+      0,
+      4,
+      null
+     ],
+     "last_nonT_block": 102
+    },
+    "0004": {
+     "blocks": 46,
+     "frac_E_R_T": [
+      0.06521739130434782,
+      0.9130434782608695,
+      0.021739130434782608
+     ],
+     "switches": 3,
+     "first_block_E_R_T": [
+      0,
+      3,
+      17
+     ],
+     "last_nonT_block": 45
+    },
+    "0005": {
+     "blocks": 154,
+     "frac_E_R_T": [
+      0.025974025974025976,
+      0.922077922077922,
+      0.05194805194805195
+     ],
+     "switches": 9,
+     "first_block_E_R_T": [
+      0,
+      4,
+      54
+     ],
+     "last_nonT_block": 153
+    },
+    "0006": {
+     "blocks": 94,
+     "frac_E_R_T": [
+      0.05319148936170213,
+      0.9468085106382979,
+      0.0
+     ],
+     "switches": 1,
+     "first_block_E_R_T": [
+      0,
+      5,
+      null
+     ],
+     "last_nonT_block": 93
+    },
+    "0009": {
+     "blocks": 10,
+     "frac_E_R_T": [
+      0.5,
+      0.5,
+      0.0
+     ],
+     "switches": 1,
+     "first_block_E_R_T": [
+      0,
+      5,
+      null
+     ],
+     "last_nonT_block": 9
+    },
+    "0012": {
+     "blocks": 112,
+     "frac_E_R_T": [
+      0.03571428571428571,
+      0.875,
+      0.08928571428571429
+     ],
+     "switches": 11,
+     "first_block_E_R_T": [
+      0,
+      4,
+      68
+     ],
+     "last_nonT_block": 111
+    }
+   },
+   "overall_frac_E_R_T": [
+    0.03567984570877531,
+    0.9421407907425265,
+    0.022179363548698167
+   ]
+  }
+ }
+}

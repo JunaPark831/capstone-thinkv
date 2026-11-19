@@ -1,0 +1,410 @@
+{
+ "skip0": {
+  "by_variant": {
+   "0.0": {
+    "total_peaks": {
+     "win1024": 2179,
+     "win256": 563
+    },
+    "chosen_variant": "win1024",
+    "win1024": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 3,
+     "same_k_ge2_layers": {},
+     "share_1": 0.09375,
+     "n_exactly3": 26
+    },
+    "win256": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 4,
+     "same_k_ge2_layers": {},
+     "share_1": 0.6111111111111112,
+     "n_exactly3": 20
+    }
+   },
+   "0.02": {
+    "total_peaks": {
+     "win1024": 299,
+     "win256": 309
+    },
+    "chosen_variant": "win256",
+    "win1024": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 0,
+     "same_k_ge2_layers": {},
+     "share_1": 0.96875,
+     "n_exactly3": 0
+    },
+    "win256": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 2,
+     "same_k_ge2_layers": {},
+     "share_1": 0.9444444444444444,
+     "n_exactly3": 3
+    }
+   },
+   "0.05": {
+    "total_peaks": {
+     "win1024": 291,
+     "win256": 302
+    },
+    "chosen_variant": "win256",
+    "win1024": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 0,
+     "same_k_ge2_layers": {},
+     "share_1": 0.9895833333333334,
+     "n_exactly3": 0
+    },
+    "win256": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 1,
+     "same_k_ge2_layers": {},
+     "share_1": 0.9618055555555556,
+     "n_exactly3": 1
+    }
+   }
+  },
+  "choice": {
+   "0.0": {
+    "L_star": [],
+    "layers_ge_2_3": [],
+    "max_prompts_exactly3": 3,
+    "same_k_ge2_layers": {},
+    "share_1": 0.09375,
+    "n_exactly3": 26,
+    "layer_variant": {
+     "0": "win1024",
+     "1": "win1024",
+     "2": "win1024",
+     "3": "win1024",
+     "4": "win1024",
+     "5": "win1024",
+     "6": "win1024",
+     "7": "win1024",
+     "8": "win1024",
+     "9": "win1024",
+     "10": "win1024",
+     "11": "win1024",
+     "12": "win1024",
+     "13": "win1024",
+     "14": "win1024",
+     "15": "win1024",
+     "16": "win1024",
+     "17": "win1024",
+     "18": "win1024",
+     "19": "win1024",
+     "20": "win1024",
+     "21": "win1024",
+     "22": "win1024",
+     "23": "win1024",
+     "24": "win1024",
+     "25": "win1024",
+     "26": "win1024",
+     "27": "win1024",
+     "28": "win1024",
+     "29": "win1024",
+     "30": "win1024",
+     "31": "win1024"
+    },
+    "n_layers_picked_win256": 0
+   },
+   "0.02": {
+    "L_star": [],
+    "layers_ge_2_3": [],
+    "max_prompts_exactly3": 2,
+    "same_k_ge2_layers": {},
+    "share_1": 0.9340277777777778,
+    "n_exactly3": 3,
+    "layer_variant": {
+     "0": "win256",
+     "1": "win256",
+     "2": "win1024",
+     "3": "win1024",
+     "4": "win1024",
+     "5": "win256",
+     "6": "win1024",
+     "7": "win1024",
+     "8": "win1024",
+     "9": "win256",
+     "10": "win256",
+     "11": "win1024",
+     "12": "win1024",
+     "13": "win256",
+     "14": "win1024",
+     "15": "win1024",
+     "16": "win1024",
+     "17": "win1024",
+     "18": "win256",
+     "19": "win1024",
+     "20": "win1024",
+     "21": "win1024",
+     "22": "win1024",
+     "23": "win1024",
+     "24": "win1024",
+     "25": "win1024",
+     "26": "win1024",
+     "27": "win1024",
+     "28": "win1024",
+     "29": "win1024",
+     "30": "win1024",
+     "31": "win1024"
+    },
+    "n_layers_picked_win256": 7
+   },
+   "0.05": {
+    "L_star": [],
+    "layers_ge_2_3": [],
+    "max_prompts_exactly3": 1,
+    "same_k_ge2_layers": {},
+    "share_1": 0.9618055555555556,
+    "n_exactly3": 1,
+    "layer_variant": {
+     "0": "win256",
+     "1": "win256",
+     "2": "win1024",
+     "3": "win1024",
+     "4": "win1024",
+     "5": "win1024",
+     "6": "win1024",
+     "7": "win1024",
+     "8": "win1024",
+     "9": "win1024",
+     "10": "win1024",
+     "11": "win1024",
+     "12": "win1024",
+     "13": "win1024",
+     "14": "win1024",
+     "15": "win1024",
+     "16": "win1024",
+     "17": "win256",
+     "18": "win256",
+     "19": "win1024",
+     "20": "win1024",
+     "21": "win1024",
+     "22": "win1024",
+     "23": "win1024",
+     "24": "win1024",
+     "25": "win1024",
+     "26": "win1024",
+     "27": "win1024",
+     "28": "win1024",
+     "29": "win1024",
+     "30": "win1024",
+     "31": "win1024"
+    },
+    "n_layers_picked_win256": 4
+   }
+  }
+ },
+ "skip1100": {
+  "by_variant": {
+   "0.0": {
+    "total_peaks": {
+     "win1024": 1425,
+     "win256": 526
+    },
+    "chosen_variant": "win1024",
+    "win1024": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 4,
+     "same_k_ge2_layers": {},
+     "share_1": 0.05555555555555555,
+     "n_exactly3": 41
+    },
+    "win256": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 5,
+     "same_k_ge2_layers": {},
+     "share_1": 0.6006944444444444,
+     "n_exactly3": 24
+    }
+   },
+   "0.02": {
+    "total_peaks": {
+     "win1024": 303,
+     "win256": 313
+    },
+    "chosen_variant": "win256",
+    "win1024": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 1,
+     "same_k_ge2_layers": {},
+     "share_1": 0.9583333333333334,
+     "n_exactly3": 1
+    },
+    "win256": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 3,
+     "same_k_ge2_layers": {},
+     "share_1": 0.9375,
+     "n_exactly3": 5
+    }
+   },
+   "0.05": {
+    "total_peaks": {
+     "win1024": 294,
+     "win256": 304
+    },
+    "chosen_variant": "win256",
+    "win1024": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 0,
+     "same_k_ge2_layers": {},
+     "share_1": 0.9791666666666666,
+     "n_exactly3": 0
+    },
+    "win256": {
+     "L_star": [],
+     "layers_ge_2_3": [],
+     "max_prompts_exactly3": 1,
+     "same_k_ge2_layers": {},
+     "share_1": 0.9548611111111112,
+     "n_exactly3": 1
+    }
+   }
+  },
+  "choice": {
+   "0.0": {
+    "L_star": [],
+    "layers_ge_2_3": [],
+    "max_prompts_exactly3": 4,
+    "same_k_ge2_layers": {},
+    "share_1": 0.052083333333333336,
+    "n_exactly3": 43,
+    "layer_variant": {
+     "0": "win1024",
+     "1": "win1024",
+     "2": "win1024",
+     "3": "win1024",
+     "4": "win1024",
+     "5": "win1024",
+     "6": "win1024",
+     "7": "win1024",
+     "8": "win1024",
+     "9": "win1024",
+     "10": "win1024",
+     "11": "win1024",
+     "12": "win1024",
+     "13": "win1024",
+     "14": "win1024",
+     "15": "win1024",
+     "16": "win1024",
+     "17": "win1024",
+     "18": "win1024",
+     "19": "win1024",
+     "20": "win1024",
+     "21": "win1024",
+     "22": "win1024",
+     "23": "win1024",
+     "24": "win1024",
+     "25": "win1024",
+     "26": "win1024",
+     "27": "win1024",
+     "28": "win1024",
+     "29": "win1024",
+     "30": "win1024",
+     "31": "win256"
+    },
+    "n_layers_picked_win256": 1
+   },
+   "0.02": {
+    "L_star": [],
+    "layers_ge_2_3": [],
+    "max_prompts_exactly3": 3,
+    "same_k_ge2_layers": {},
+    "share_1": 0.9201388888888888,
+    "n_exactly3": 5,
+    "layer_variant": {
+     "0": "win256",
+     "1": "win256",
+     "2": "win1024",
+     "3": "win256",
+     "4": "win1024",
+     "5": "win256",
+     "6": "win1024",
+     "7": "win1024",
+     "8": "win1024",
+     "9": "win256",
+     "10": "win256",
+     "11": "win1024",
+     "12": "win1024",
+     "13": "win256",
+     "14": "win1024",
+     "15": "win256",
+     "16": "win1024",
+     "17": "win1024",
+     "18": "win256",
+     "19": "win1024",
+     "20": "win1024",
+     "21": "win1024",
+     "22": "win1024",
+     "23": "win1024",
+     "24": "win1024",
+     "25": "win1024",
+     "26": "win1024",
+     "27": "win1024",
+     "28": "win1024",
+     "29": "win1024",
+     "30": "win1024",
+     "31": "win1024"
+    },
+    "n_layers_picked_win256": 9
+   },
+   "0.05": {
+    "L_star": [],
+    "layers_ge_2_3": [],
+    "max_prompts_exactly3": 1,
+    "same_k_ge2_layers": {},
+    "share_1": 0.9479166666666666,
+    "n_exactly3": 1,
+    "layer_variant": {
+     "0": "win256",
+     "1": "win1024",
+     "2": "win1024",
+     "3": "win1024",
+     "4": "win1024",
+     "5": "win1024",
+     "6": "win1024",
+     "7": "win1024",
+     "8": "win1024",
+     "9": "win1024",
+     "10": "win1024",
+     "11": "win1024",
+     "12": "win1024",
+     "13": "win1024",
+     "14": "win1024",
+     "15": "win256",
+     "16": "win1024",
+     "17": "win256",
+     "18": "win256",
+     "19": "win1024",
+     "20": "win1024",
+     "21": "win1024",
+     "22": "win1024",
+     "23": "win1024",
+     "24": "win1024",
+     "25": "win1024",
+     "26": "win1024",
+     "27": "win1024",
+     "28": "win1024",
+     "29": "win1024",
+     "30": "win1024",
+     "31": "win1024"
+    },
+    "n_layers_picked_win256": 4
+   }
+  }
+ }
+}

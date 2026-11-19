@@ -1,0 +1,6 @@
+replay legacy vs stored: max|diff| 0.0002442002296447754 mean|diff| 0.00012190923007437959
+per-layer corr min/median 0.9990331530570984 0.9999432563781738
+legacy_perhead     mean 0.980  min 0.005  max 1.000  frac>0.98 0.753
+paper              mean 0.975  min 0.000  max 1.000  frac>0.98 0.675
+pergroup_maxpool   mean 0.970  min 0.001  max 1.000  frac>0.98 0.616
+headavg_nomax      mean 0.986  min 0.000  max 1.000  frac>0.98 0.827

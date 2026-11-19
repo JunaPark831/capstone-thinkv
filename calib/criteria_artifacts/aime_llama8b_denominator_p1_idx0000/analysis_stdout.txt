@@ -1,0 +1,25 @@
+steps=10568  min_step=1100  (판정은 step>=1100만)
+
+== legacy_perhead: S1 1/32 layers (>= 8 → False) | S2 0 (→ False) | S3(×1,no prominence) 9 layers (>= 4 → True) [old 3bw: 2, old prom: 0] | ×1 mode-count histogram {1: 7, 2: 7, 3: 9, 4: 3, 5: 3, 6: 1, 8: 2} | D width median 0.005 max 0.090 | frac>.98 0.948
+
+== paper: S1 0/32 layers (>= 8 → False) | S2 0 (→ False) | S3(×1,no prominence) 3 layers (>= 4 → False) [old 3bw: 2, old prom: 0] | ×1 mode-count histogram {1: 6, 2: 7, 3: 3, 4: 7, 5: 2, 6: 3, 7: 2, 9: 1, 11: 1} | D width median 0.009 max 0.034 | frac>.98 0.947
+
+== paper_nosink: S1 3/32 layers (>= 8 → False) | S2 0 (→ False) | S3(×1,no prominence) 0 layers (>= 4 → False) [old 3bw: 0, old prom: 0] | ×1 mode-count histogram {2: 1, 5: 4, 6: 1, 7: 6, 8: 4, 9: 4, 10: 5, 12: 2, 13: 1, 15: 3, 17: 1} | D width median 0.062 max 0.189 | frac>.98 0.499
+
+== paper_win256: S1 32/32 layers (>= 8 → True) | S2 32 (→ True) | S3(×1,no prominence) 3 layers (>= 4 → False) [old 3bw: 0, old prom: 0] | ×1 mode-count histogram {1: 19, 2: 7, 3: 3, 4: 1, 5: 2} | D width median 0.184 max 0.314 | frac>.98 0.000
+
+== paper_win1024: S1 31/32 layers (>= 8 → True) | S2 31 (→ True) | S3(×1,no prominence) 4 layers (>= 4 → True) [old 3bw: 0, old prom: 0] | ×1 mode-count histogram {1: 1, 2: 2, 3: 4, 4: 6, 5: 6, 6: 6, 7: 2, 8: 2, 11: 2, 13: 1} | D width median 0.060 max 0.135 | frac>.98 0.031
+
+판정(개정 S3 적용): 지지됨 (S1·S2·S3 충족 변형 있음)
+음성 대조군(paper, 행 전체·포화) S3 통과 여부: False (3개 레이어)  ← True면 개정 S3는 이 데이터에서 신호를 가르지 못한다
+
+무거운 위치 수 k = (1-s)*m (레이어 10, 구간별 중앙값). m = 행에 넣은 위치 수
+  paper          [0-500)     33.0  [500-1500)     37.9  [1500-3300)     39.1  [3300-10568)     43.5
+  paper_nosink   [0-500)    133.0  [500-1500)    142.7  [1500-3300)    144.4  [3300-10568)    174.3
+  paper_win256   [0-500)     79.5  [500-1500)    103.0  [1500-3300)     93.0  [3300-10568)     83.0
+  paper_win1024  [0-500)     33.0  [500-1500)     78.0  [1500-3300)    125.0  [3300-10568)    111.0
+  (n 중앙값)       [0-500)    341.5  [500-1500)   1091.5  [1500-3300)   2491.5  [3300-10568)   7025.5
+
+sink_mass: 전체 평균 0.594, 레이어10 평균 0.443 (스텝 상관 -0.33); 레이어별 평균 min 0.141 max 0.864
+
+saved to /private/tmp/claude-501/-Users-juna-dev-thinkv-kvpress/d25dc06d-5491-466d-99ed-8d51d68034cc/scratchpad/denom_out_0000
