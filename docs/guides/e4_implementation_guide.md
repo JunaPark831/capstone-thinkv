@@ -1,6 +1,6 @@
 # E4 구현 안내 — ThinKV(분류기 + TBQ + TBE)를 kvpress 위에 짜는 법 (2026-11-05)
 
-확정값은 `docs/e4_tbe_tbq_design.md` 6절. 이 문서는 "어디에 어떤 코드를 두고, 어떤 순서로 무엇이 일어나야 하는가"만 적는다. 환경: kvpress 0.5.5, transformers 5.2.0, torch 2.14, `.venv-kvpress`.
+확정값은 `docs/design/e4_tbe_tbq_design.md` 6절. 이 문서는 "어디에 어떤 코드를 두고, 어떤 순서로 무엇이 일어나야 하는가"만 적는다. 환경: kvpress 0.5.5, transformers 5.2.0, torch 2.14, `.venv-kvpress`.
 
 ## 0. 먼저 알아둘 사실 (코드를 읽어 확인한 것)
 

@@ -46,23 +46,23 @@ flowchart TD
 
 | 단계 | 한 일 | 결과 | 자세한 곳 |
 |---|---|---|---|
-| 0. 환경과 기준선 | kvpress 위에서 무압축(FullKV)과 Knorm 실행 | 측정 경로 확인 | `eval/`, `results/`, `docs/stage0.html` |
-| 1. 희소도 3봉 확인 | 논문은 희소도 분포에 봉우리 3개가 나온다고 한다. 미리 정한 기준으로 확인 | **나오지 않았다.** 아래 참조 | `docs/e3_*.md`, `calib/` |
-| 2. 사고 유형 분류기 | 논문 방식의 임계값을 얻지 못해 대체 임계값으로 분류기를 만듦 | 측정 층 24, 최근 256칸 창의 희소도 사용 | `docs/e4_implementation_guide.md` |
-| 3. TBQ + TBE | 양자화(값을 양자화한 뒤 16비트로 되돌려 저장)와 퇴출을 kvpress 위에 구현 | 10문제 평가, 아래 참조 | `thinkv/`, `docs/e4_tbe_tbq_design.md` |
-| 4. CT 커널 | vLLM의 Triton 어텐션 커널을 가져와 빈칸 재사용을 붙이고 RTX 4090에서 측정 | 아래 참조 | `kernels/`, `docs/e10_ct_kernel_design.md` |
-| 5. 온디바이스 구현 | 진짜 2·4비트 저장, C++ 어텐션, 모델을 NPU 조각으로 자르기 | Mac에서 테스트 19개 통과 | `ondevice/`, `docs/ondevice_npu_cpu_design.md` |
+| 0. 환경과 기준선 | kvpress 위에서 무압축(FullKV)과 Knorm 실행 | 측정 경로 확인 | `eval/`, `results/`, `docs/guides/stage0.html` |
+| 1. 희소도 3봉 확인 | 논문은 희소도 분포에 봉우리 3개가 나온다고 한다. 미리 정한 기준으로 확인 | **나오지 않았다.** 아래 참조 | `docs/criteria/`, `calib/` |
+| 2. 사고 유형 분류기 | 논문 방식의 임계값을 얻지 못해 대체 임계값으로 분류기를 만듦 | 측정 층 24, 최근 256칸 창의 희소도 사용 | `docs/guides/e4_implementation_guide.md` |
+| 3. TBQ + TBE | 양자화(값을 양자화한 뒤 16비트로 되돌려 저장)와 퇴출을 kvpress 위에 구현 | 10문제 평가, 아래 참조 | `thinkv/`, `docs/design/e4_tbe_tbq_design.md` |
+| 4. CT 커널 | vLLM의 Triton 어텐션 커널을 가져와 빈칸 재사용을 붙이고 RTX 4090에서 측정 | 아래 참조 | `kernels/`, `docs/design/e10_ct_kernel_design.md` |
+| 5. 온디바이스 구현 | 진짜 2·4비트 저장, C++ 어텐션, 모델을 NPU 조각으로 자르기 | Mac에서 테스트 19개 통과 | `ondevice/`, `docs/design/ondevice_npu_cpu_design.md` |
 | 6. 보드 실행 | NPU 컴파일, 보드에서 속도와 메모리 측정 | 아직 없음 | `ondevice/README.md` |
 
 ## 단계별 결과
 
 ### 1. 희소도 봉우리 3개는 재현되지 않았다
 
-- 결과를 보기 전에 판정 기준을 문서로 고정했다(`docs/e3_branch_a_criteria.md`).
-- 작은 모델(R1-Distill-Qwen 1.5B, 7B)에서 기준을 통과하지 못했다(`docs/e3_branch_a_2type_fallback.md`).
+- 결과를 보기 전에 판정 기준을 문서로 고정했다(`docs/criteria/e3_branch_a_criteria.md`).
+- 작은 모델(R1-Distill-Qwen 1.5B, 7B)에서 기준을 통과하지 못했다(`docs/criteria/e3_branch_a_2type_fallback.md`).
 - 논문과 같은 모델(R1-Distill-Llama-8B)로 논문 Algorithm 1을 그대로 돌렸다. 문제 9개에서 "모든 문제에서 봉우리가 3개인 층"이 하나도 없었다. 창 변형 4개와 워밍업 규칙 2개의 조합 8개 모두 같았다.
 - 잔물결을 걸러내는 필터를 쓰면 분포는 사실상 봉우리 하나다.
-- 논문이 KDE 폭을 밝히지 않아, 저자 설정에서도 같은지는 이 데이터로 단정할 수 없다(`docs/e3_paper_calibration_spec.md`).
+- 논문이 KDE 폭을 밝히지 않아, 저자 설정에서도 같은지는 이 데이터로 단정할 수 없다(`docs/criteria/e3_paper_calibration_spec.md`).
 
 ### 3. TBQ + TBE 평가 (작은 표본)
 
@@ -93,7 +93,7 @@ AIME 2024 10문제를 한 번씩, R1-Distill-Llama-8B, 예산 1024토큰, 최대
 | CT 대 게더, 퇴출 스텝의 정지 시간 | CT가 1.9~37배 짧음 |
 | CT 대 게더, KV 메모리 최댓값 | CT가 40% 적음 |
 
-모델 전체 처리량이 아니고 합성 타임라인, 시드 1개다. 전체 표와 단서는 `docs/e10_ct_kernel_design.md` 9절.
+모델 전체 처리량이 아니고 합성 타임라인, 시드 1개다. 전체 표와 단서는 `docs/design/e10_ct_kernel_design.md` 9절.
 
 ### 5. 온디바이스 구현
 
@@ -157,7 +157,8 @@ kernels/       블록 장부(block_table.py), vLLM Triton 커널 이식, 벤치�
 ondevice/      보드용 구현: 압축 저장, C++ 어텐션, NPU 조각, 테스트
 tests/kernels/ 커널 테스트
 results/       0단계 결과, CT 커널 벤치마크 결과
-docs/          단계별 설계 문서와 재현 보고서
+docs/          문서: design/ 설계, criteria/ 실험 사전 기준, guides/ 안내서,
+               reports/ 재현 보고서, meetings/ 미팅 자료
 ```
 
 ## 실행
@@ -179,4 +180,4 @@ python -m venv .venv-kvpress
 .venv-kvpress/bin/python -m pytest ondevice/tests -q -s
 ```
 
-`docs/*.html`은 GitHub에서 소스로 보이므로 내려받아 브라우저로 연다.
+`docs/guides/*.html`은 GitHub에서 소스로 보이므로 내려받아 브라우저로 연다.

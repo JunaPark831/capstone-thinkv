@@ -1,4 +1,4 @@
-"""KDE 폭(Scott 배수)을 바꿔 가며 봉우리 수와 Algorithm 1 결과를 다시 센다. 사전 기록: docs/e3_paper_calibration_spec.md "KDE 폭 스윕 사전 기록".
+"""KDE 폭(Scott 배수)을 바꿔 가며 봉우리 수와 Algorithm 1 결과를 다시 센다. 사전 기록: docs/criteria/e3_paper_calibration_spec.md "KDE 폭 스윕 사전 기록".
 
 사용: python -I sweep_bandwidth.py --dir DATA_DIR --out RESULT.json
 조합: 변형 4 x 워밍업 {0, 1100} x 폭 {0.5, 1, 2, 3, 5, 8}. 판정 규칙(정확히 3봉, 교집합)과 그 밖의 설정은 calibrate_paper.py 와 같다.

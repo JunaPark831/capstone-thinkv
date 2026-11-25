@@ -2,7 +2,7 @@
 
 - 작성 시각: 2026-11-04 (결과를 보기 전)
 - 상태: 이 기준으로 만든 희소도·KDE 결과는 아직 하나도 보지 않았다.
-- 목적: `docs/e3_branch_a_criteria.md`의 FAIL이 모델 크기 때문인지, 우리 측정식이 논문과 달라서인지 가른다.
+- 목적: `docs/criteria/e3_branch_a_criteria.md`의 FAIL이 모델 크기 때문인지, 우리 측정식이 논문과 달라서인지 가른다.
 - 이 문서와 기존 두 문서(`e3_branch_a_criteria.md`, `e3_branch_a_2type_fallback.md`)는 결과를 본 뒤 고치지 않는다. 고칠 일이 생기면 별도 수정 기록을 덧붙인다.
 
 ## 1. 왜 다시 하나

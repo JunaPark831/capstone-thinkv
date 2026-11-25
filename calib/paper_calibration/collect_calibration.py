@@ -1,4 +1,4 @@
-"""논문 Algorithm 1 의 수집 단계 (명세: docs/e3_paper_calibration_spec.md).
+"""논문 Algorithm 1 의 수집 단계 (명세: docs/criteria/e3_paper_calibration_spec.md).
 
 사용: python collect_calibration.py --out DIR [--P 100] [--max-new 32768] [--shard 0/1]
                                     [--model deepseek-ai/DeepSeek-R1-Distill-Llama-8B] [--device auto]

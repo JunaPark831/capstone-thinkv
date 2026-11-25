@@ -1,5 +1,5 @@
 """봉우리다움 필터 단계별로 Algorithm 1 을 다시 적용한다 (win256 / win1024, 변형 단위·레이어 단위 선택).
-사전 기록: docs/e3_paper_calibration_spec.md "봉우리다운 것만".
+사전 기록: docs/criteria/e3_paper_calibration_spec.md "봉우리다운 것만".
 
 사용: python -I sweep_peaklike.py --dir DATA_DIR --out RESULT.json [--bw 0.5,1.0]
 """

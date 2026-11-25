@@ -222,7 +222,7 @@ footer{margin-top:56px;color:var(--muted);font-size:.88rem}
   <tr><td><b>OK</b></td><td>L*가 비어 있지 않음</td><td>θ₁, θ₂ 계산. L* 크기가 4가 아니면 그 사실도 함께 보고</td></tr>
   <tr><td><b>FAIL</b></td><td>L*가 비어 있음</td><td>임의로 규칙을 풀지 않고 <b>멈춘 뒤 사용자에게 방향을 묻는다</b></td></tr>
 </table></div>
-<p>이 규칙은 결과를 보기 전에 <code>docs/e3_paper_calibration_spec.md</code>에 적어 두었고, 결과를 본 뒤에 바꾸지 않습니다. 결과가 비어 있어도 "레이어별로 3봉이던 문제 수"와 "봉우리 수 분포"는 항상 보고합니다.</p>
+<p>이 규칙은 결과를 보기 전에 <code>docs/criteria/e3_paper_calibration_spec.md</code>에 적어 두었고, 결과를 본 뒤에 바꾸지 않습니다. 결과가 비어 있어도 "레이어별로 3봉이던 문제 수"와 "봉우리 수 분포"는 항상 보고합니다.</p>
 
 <h3>3.7 워밍업 처리: 두 가지를 같이 낸다</h3>
 <p><b>모든 디코드 스텝을 쓰는 것(논문 알고리즘 글자 그대로)을 주 결과</b>로 하고, 앞 1100스텝을 뺀 것을 <b>논문에 없는 변형</b>으로 나란히 보고합니다(1100은 이전 Mac 분석에서 판정 시작점으로 쓰던 값). 변형 4개(<code>full_nosink</code>, <code>win1024</code>, <code>win256</code> + 참고 <code>full_literal</code>) × 워밍업 2가지 = 분석 8번입니다.</p>
@@ -265,7 +265,7 @@ footer{margin-top:56px;color:var(--muted);font-size:.88rem}
 </ul>
 
 <footer>
-  관련 파일: <code>calib/paper_calibration/collect_calibration.py</code> · <code>calib/paper_calibration/calibrate_paper.py</code> · <code>docs/e3_paper_calibration_spec.md</code><br>
+  관련 파일: <code>calib/paper_calibration/collect_calibration.py</code> · <code>calib/paper_calibration/calibrate_paper.py</code> · <code>docs/criteria/e3_paper_calibration_spec.md</code><br>
   이 문서의 곡선과 표 숫자 예시는 개념 설명용 가상 데이터입니다.
 </footer>
 </main>

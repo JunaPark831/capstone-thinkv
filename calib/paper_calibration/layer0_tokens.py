@@ -1,5 +1,5 @@
 """win256 레이어 0의 낮은 언덕(0.05~0.25)과 높은 언덕(0.40~0.55)에 속한 스텝의 실제 토큰을 뽑아 비교한다.
-사전 기록: docs/e3_paper_calibration_spec.md "같이 하는 확인(레이어 0 토큰)". 판정 기준 없음, 사실만 보고.
+사전 기록: docs/criteria/e3_paper_calibration_spec.md "같이 하는 확인(레이어 0 토큰)". 판정 기준 없음, 사실만 보고.
 
 사용: HF_HUB_OFFLINE=1 python -I layer0_tokens.py --dir DATA_DIR [--prompts 0002,0004,0012] [--n 15]
 """

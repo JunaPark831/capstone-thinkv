@@ -4,7 +4,7 @@
 
 이 문서는 `calib/sparsity/` 아래 모든 희소도 수집 실험과 그 분석 결과(E3 분기점 A 판정)를 정리하고, 우리의 측정 방식이 ThinKV 논문(arXiv 2510.01290)과 어떻게 다른지 기록한다.
 
-모든 판정은 `calib/criteria_checker.py`가 사전 등록 기준(`docs/e3_branch_a_criteria.md`)을 적용해 자동 생성했다. 수치는 원시 `.pt`와 `calib/criteria_artifacts/<실험>/criteria_result.json`에서 검증했다.
+모든 판정은 `calib/criteria_checker.py`가 사전 등록 기준(`docs/criteria/e3_branch_a_criteria.md`)을 적용해 자동 생성했다. 수치는 원시 `.pt`와 `calib/criteria_artifacts/<실험>/criteria_result.json`에서 검증했다.
 
 ## 공통 설정
 
@@ -55,7 +55,7 @@
 ### qwen7b_s1k_p11_max35000
 - 모델 크기를 7B로 키운 실험. 11문제 중 10개가 EOS로 종료했다.
 - 3봉 비율은 모든 폭에서 최대 1/11(9.1%)에 그쳤다. 레이어 4가 2봉 신호가 상대적으로 반복됐으나 세 폭에서 50%를 넘지 못했다.
-- 이 결과를 근거로 2유형 fallback 검토를 시작했다(`docs/e3_branch_a_2type_fallback.md`).
+- 이 결과를 근거로 2유형 fallback 검토를 시작했다(`docs/criteria/e3_branch_a_2type_fallback.md`).
 
 ### aime_llama8b_p10_max35000
 - 논문 그림 3과 같은 계열인 R1-Distill-Llama-8B와 AIME 2024/2025 프롬프트로 수집(각 연도 5문제).
@@ -118,6 +118,6 @@ sparsity = smaller.float().mean()                  # 헤드 × kv 전체 True �
 ## 관련 파일
 - 수집: `calib/collect_sparsity.py`
 - 판정: `calib/criteria_checker.py`
-- 사전 기준: `docs/e3_branch_a_criteria.md`
-- 2유형 fallback: `docs/e3_branch_a_2type_fallback.md`
+- 사전 기준: `docs/criteria/e3_branch_a_criteria.md`
+- 2유형 fallback: `docs/criteria/e3_branch_a_2type_fallback.md`
 - 결과물: `calib/criteria_artifacts/<실험>/`

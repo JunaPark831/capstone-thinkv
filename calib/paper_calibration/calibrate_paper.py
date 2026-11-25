@@ -1,4 +1,4 @@
-"""논문 Algorithm 1 (offline calibration) 그대로. 명세: docs/e3_paper_calibration_spec.md
+"""논문 Algorithm 1 (offline calibration) 그대로. 명세: docs/criteria/e3_paper_calibration_spec.md
 
 사용: python calibrate_paper.py --dir DIR --variant full_nosink --out RESULT.json [--T 3]
       python calibrate_paper.py --selftest

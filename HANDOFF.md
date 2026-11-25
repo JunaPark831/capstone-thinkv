@@ -9,11 +9,11 @@
 | 단계 | 상태 | 정본 문서 |
 |---|---|---|
 | 0. 환경과 기준선 | 완료 | 이 문서 아래 "0단계 기록" |
-| 1. 희소도 3봉 확인 | 완료. 미리 정한 기준과 논문 Algorithm 1 모두에서 3봉이 나오지 않았다 | `docs/e3_branch_a_criteria.md`, `docs/e3_branch_a_2type_fallback.md`, `docs/e3_paper_calibration_spec.md` |
-| 2. 사고 유형 분류기 | 완료. 대체 임계값 사용 | `docs/e4_implementation_guide.md` |
-| 3. TBQ + TBE | 구현 완료. 평가는 AIME 2024 10문제를 한 번씩만 돌렸다 | `docs/e4_tbe_tbq_design.md`, `thinkv/result/` |
-| 4. CT 커널 벤치마크 | 1차 측정 완료(RTX 4090) | `docs/e10_ct_kernel_design.md` 9절 |
-| 5. 온디바이스 구현 | 완료. `ondevice/tests` 19개 통과(8B, Mac) | `docs/ondevice_npu_cpu_design.md`, `ondevice/HANDOFF.md` |
+| 1. 희소도 3봉 확인 | 완료. 미리 정한 기준과 논문 Algorithm 1 모두에서 3봉이 나오지 않았다 | `docs/criteria/e3_branch_a_criteria.md`, `docs/criteria/e3_branch_a_2type_fallback.md`, `docs/criteria/e3_paper_calibration_spec.md` |
+| 2. 사고 유형 분류기 | 완료. 대체 임계값 사용 | `docs/guides/e4_implementation_guide.md` |
+| 3. TBQ + TBE | 구현 완료. 평가는 AIME 2024 10문제를 한 번씩만 돌렸다 | `docs/design/e4_tbe_tbq_design.md`, `thinkv/result/` |
+| 4. CT 커널 벤치마크 | 1차 측정 완료(RTX 4090) | `docs/design/e10_ct_kernel_design.md` 9절 |
+| 5. 온디바이스 구현 | 완료. `ondevice/tests` 19개 통과(8B, Mac) | `docs/design/ondevice_npu_cpu_design.md`, `ondevice/HANDOFF.md` |
 | 6. 보드 실행과 측정 | 예정 | `ondevice/README.md` |
 
 ## 관련 문서
@@ -21,12 +21,13 @@
 | 파일 | 내용 |
 |---|---|
 | `README.md` | 진행 현황, 단계별 결과, 다이어그램 |
-| `docs/ondevice_npu_cpu_design.md` | 보드용 NPU + CPU 분업 설계, 결정 사항, Mac 실측, 백로그 |
+| `docs/design/ondevice_npu_cpu_design.md` | 보드용 NPU + CPU 분업 설계, 결정 사항, Mac 실측, 백로그 |
 | `ondevice/HANDOFF.md` | 온디바이스 코드 작업 규칙과 확정 사항 |
 | `ondevice/README.md` | 보드 담당 팀원용 실행·측정 안내 |
-| `docs/e10_ct_kernel_design.md` | CT 커널 설계와 벤치마크 결과, 백로그 |
-| `docs/e3_*.md`, `docs/e4_*.md` | 희소도 분석과 TBQ·TBE 설계 |
-| `docs/stage0.html`, `docs/stage1.html` | 0·1단계 안내서 |
+| `docs/design/e10_ct_kernel_design.md` | CT 커널 설계와 벤치마크 결과, 백로그 |
+| `docs/criteria/`, `docs/design/e4_tbe_tbq_design.md`, `docs/guides/e4_implementation_guide.md` | 희소도 분석과 TBQ·TBE 설계 |
+| `docs/reports/`, `docs/meetings/` | 재현 보고서, 미팅 자료 |
+| `docs/guides/stage0.html`, `docs/guides/stage1.html` | 0·1단계 안내서 |
 
 설계의 기준은 Obsidian 볼트 `캡스톤디자인/version2/구현/ThinKV 구현 계획.md`다. 계획과 달라지면 계획서에 이유와 날짜를 적는다.
 
@@ -53,8 +54,8 @@
 1. **보드 실행과 측정**(보드 담당 팀원). 조각을 NPU용으로 컴파일하고, 속도와 메모리를 잰다. 순서는 `ondevice/README.md`.
 2. **NPU 호출 왕복 시간 확인.** 토큰당 33번 호출을 감당하지 못하면 가중치 계산도 CPU로 옮기는 방안을 검토한다(2026-11-17 팀원 제안, 미결).
 3. **백로그**(착수 조건은 각 문서):
-   - 퇴출 때 다시 묶어 재양자화하기, 1B급 모델 + 무압축 KV 대 8B + ThinKV 비교 (`docs/ondevice_npu_cpu_design.md` 11절)
-   - 논문과의 차이 정리, 가중치·활성값·KV 정밀도별 prefill·decode 속도 측정 (`docs/e10_ct_kernel_design.md` 10·11절)
+   - 퇴출 때 다시 묶어 재양자화하기, 1B급 모델 + 무압축 KV 대 8B + ThinKV 비교 (`docs/design/ondevice_npu_cpu_design.md` 11절)
+   - 논문과의 차이 정리, 가중치·활성값·KV 정밀도별 prefill·decode 속도 측정 (`docs/design/e10_ct_kernel_design.md` 10·11절)
 4. **열려 있는 것**: TBQ + TBE 평가는 10문제뿐이라 결론을 낼 수 없다. 균일 2비트·균일 4비트·TBQ만 설정은 실행이 오염되어 다시 돌려야 한다(`thinkv/result/`의 `.contaminated`).
 
 ## 0단계 기록 (2026-10-01 기준, 그대로 보존)

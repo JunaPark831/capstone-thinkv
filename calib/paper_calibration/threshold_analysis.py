@@ -1,5 +1,5 @@
 """문턱(1/2/5/10%) × 변형 채널마다 (1) 논문 그대로 Algorithm 1, (2) prominence 0.05 필터, (3) 키워드 라벨 AUC 를 한 표로 낸다.
-사전 기록: docs/e3_paper_calibration_spec.md "문턱 1% → 2·5·10% 재측정".
+사전 기록: docs/criteria/e3_paper_calibration_spec.md "문턱 1% → 2·5·10% 재측정".
 
 사용: HF_HUB_OFFLINE=1 python -I threshold_analysis.py --dir THRESH_DIR --out OUT_DIR
 """

@@ -1,5 +1,5 @@
 """청크 teacher-forcing 재생으로 (범위 6: 싱크 블록·로컬 창 제외 'mid' 포함) × (정의 4: 최댓값 대비 1%/5%, 누적 질량 90%/95%) 희소도를 잰다.
-사전 기록: docs/e3_paper_calibration_spec.md "위치 마스킹 + 누적 질량 정의 재측정".
+사전 기록: docs/criteria/e3_paper_calibration_spec.md "위치 마스킹 + 누적 질량 정의 재측정".
 
 사용: HF_HUB_OFFLINE=1 python -I replay_masked.py --dir DATA_DIR --out OUT_DIR [--chunk 512] [--only 0009] [--ref THRESH_DIR]
 """

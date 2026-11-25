@@ -1,4 +1,4 @@
-"""분위수 임계값 대체 방법 (논문 Algorithm 1 아님). 사전 기록: docs/e3_paper_calibration_spec.md "분위수 임계값 실행 사전 기록".
+"""분위수 임계값 대체 방법 (논문 Algorithm 1 아님). 사전 기록: docs/criteria/e3_paper_calibration_spec.md "분위수 임계값 실행 사전 기록".
 
 사용: python -I quantile_calibration.py --dir DATA_DIR --out OUT_DIR [--variant win1024] [--k 4] [--win 128]
 산출: result.json, fig_timeseries.png (문제별 φ̄ 시계열 + θ 띠), fig_distribution.png (합친 분포·KDE·θ·레이어 점수)

@@ -5,7 +5,7 @@
 - **NPU**는 가중치 계산을 맡는다. 모델을 층 단위 조각 33개로 잘라 올린다.
 - **CPU**는 나머지를 맡는다. KV 캐시를 진짜 2·4비트로 저장하고, 퇴출할 때는 빈칸 표시만 하며, 어텐션을 C++로 계산한다.
 
-설계는 `docs/ondevice_npu_cpu_design.md`에 있다.
+설계는 `docs/design/ondevice_npu_cpu_design.md`에 있다.
 
 ## 파일
 

@@ -1,4 +1,4 @@
-"""CT 블록 테이블: 호스트 쪽 자료구조 (스펙 docs/e10_ct_kernel_design.md 3절).
+"""CT 블록 테이블: 호스트 쪽 자료구조 (스펙 docs/design/e10_ct_kernel_design.md 3절).
 
 어텐션 커널은 이 상태를 직접 읽지 않는다. kernel_inputs()가 만드는
 block_tables / live_mask / seq_lens 세 텐서만 받는다.

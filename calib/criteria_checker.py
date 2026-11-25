@@ -1,6 +1,6 @@
 """Check the preregistered E3 branch-A criterion on collected sparsity data.
 
-The decision rule is fixed in docs/e3_branch_a_criteria.md. This script does
+The decision rule is fixed in docs/criteria/e3_branch_a_criteria.md. This script does
 not tune thresholds from the observed result. It writes a machine-readable
 record, a Markdown summary, three bandwidth-specific KDE figures, and one
 cross-bandwidth fraction figure.
@@ -34,7 +34,7 @@ DEFAULT_INPUT_DIR = (
 DEFAULT_OUTPUT_DIR = (
     CALIB_DIR / "criteria_artifacts" / "aime_llama8b_p10_max35000"
 )
-CRITERIA_SOURCE = PROJECT_DIR / "docs" / "e3_branch_a_criteria.md"
+CRITERIA_SOURCE = PROJECT_DIR / "docs" / "criteria" / "e3_branch_a_criteria.md"
 
 GRID = np.linspace(0.0, 1.0, 512)
 BANDWIDTH_SCALES = (0.5, 1.0, 2.0)

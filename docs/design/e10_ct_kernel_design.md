@@ -1,7 +1,7 @@
 # E10: Continuous Thinking(CT) 커널 설계 (2026-11-09 초안)
 
 근거: 구현 계획 §3.4·§4 E10, 「커널 구현 경로 — Triton 과 CUDA」(Obsidian `version2/구현/`), 논문 §5.2·D.6·C.3(`docs/paper/ThinKV 한국어 완역.md`).
-이 문서는 **정확도 평가 파이프라인(가이드 `e4_implementation_guide.md`)과 무관한 독립 벤치마크**의 설계다. 가이드·`thinkv/`·`ThoughtEvictor`는 건드리지 않는다.
+이 문서는 **정확도 평가 파이프라인(가이드 `docs/guides/e4_implementation_guide.md`)과 무관한 독립 벤치마크**의 설계다. 가이드·`thinkv/`·`ThoughtEvictor`는 건드리지 않는다.
 
 ## 1. 결정 사항
 

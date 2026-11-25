@@ -1,6 +1,6 @@
 # 온디바이스 ThinKV: VENTUNO Q에서 NPU + CPU 분업 설계 (2026-11-16 초안, 2026-11-19 갱신)
 
-근거: 2026-11-16 사용자와의 설계 대화, `docs/e10_ct_kernel_design.md`(E10, 블록 테이블), `docs/e4_tbe_tbq_design.md`(TBE·TBQ), Obsidian `version2/우려사항/온디바이스 실행 범위.md`·`version2/디바이스/디바이스 비교.md`.
+근거: 2026-11-16 사용자와의 설계 대화, `docs/design/e10_ct_kernel_design.md`(E10, 블록 테이블), `docs/design/e4_tbe_tbq_design.md`(TBE·TBQ), Obsidian `version2/우려사항/온디바이스 실행 범위.md`·`version2/디바이스/디바이스 비교.md`.
 이 문서의 시간·계산량 숫자는 **모두 계산으로 낸 추정값**이다. 실측이 나오면 9절에 기록하고 추정값을 고친다.
 
 ## 0. 목표와 범위

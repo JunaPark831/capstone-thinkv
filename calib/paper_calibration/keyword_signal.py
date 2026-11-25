@@ -1,5 +1,5 @@
 """키워드 라벨(논문 표 7)로 디코드 스텝에 사고 유형을 붙이고, 라벨별 희소도 분포가 갈리는지 AUC 로 본다.
-사전 기록: docs/e3_paper_calibration_spec.md "키워드 라벨 신호 검증". 키워드는 검증용 라벨이며 분류기가 아니다.
+사전 기록: docs/criteria/e3_paper_calibration_spec.md "키워드 라벨 신호 검증". 키워드는 검증용 라벨이며 분류기가 아니다.
 
 사용: HF_HUB_OFFLINE=1 python -I keyword_signal.py --dir DATA_DIR --out OUT_DIR [--W 64]
 산출: result.json, fig_auc.png (레이어별 AUC), fig_best_layers.png (상위 4개 레이어의 라벨별 히스토그램)

@@ -1,5 +1,5 @@
 """win256 / win1024 중 봉우리가 더 많은 쪽을 고르고(변형 단위, 레이어 단위) Algorithm 1 을 다시 적용한다.
-사전 기록: docs/e3_paper_calibration_spec.md "봉우리가 더 많은 변형 고르기".
+사전 기록: docs/criteria/e3_paper_calibration_spec.md "봉우리가 더 많은 변형 고르기".
 
 사용: python -I select_variant.py --dir DATA_DIR --out RESULT.json [--bw-mult 1.0]
 봉우리 = find_peaks(d/d.max(), prominence=p), KDE = 가우시안 Scott x bw-mult, 512점 격자(calibrate_paper.py 와 같음).

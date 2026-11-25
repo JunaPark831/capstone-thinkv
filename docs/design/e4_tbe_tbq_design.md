@@ -1,6 +1,6 @@
 # E4: TBE·TBQ 설계 — 논문에 있는 값과 우리가 정해야 하는 값 (2026-11-04 초안)
 
-입력 분류기: `calib/paper_calibration/calibration_chosen.json` (#7: `win256_mid@max1`, L* = {24}, θ = (0.2955, 0.4932), τ = 128). 이 분류기는 논문 Algorithm 1 재현이 아니라 단일 문제 3봉 캘리브레이션이며, 평가에서 대조군과 같은 예산으로 비교한다(`docs/e3_paper_calibration_spec.md`).
+입력 분류기: `calib/paper_calibration/calibration_chosen.json` (#7: `win256_mid@max1`, L* = {24}, θ = (0.2955, 0.4932), τ = 128). 이 분류기는 논문 Algorithm 1 재현이 아니라 단일 문제 3봉 캘리브레이션이며, 평가에서 대조군과 같은 예산으로 비교한다(`docs/criteria/e3_paper_calibration_spec.md`).
 
 ## 1. 논문이 명시한 값 (§4.2, §4.3, §6.1, D.3~D.6)
 
@@ -69,7 +69,7 @@
 
 ## 6. 확정 (2026-11-05, 결정 페이지에서 읽음)
 
-2절의 "제안(기본값)"은 아래 확정값으로 대체한다. 구현은 사용자가 직접 한다(안내: `docs/e4_implementation_guide.md`).
+2절의 "제안(기본값)"은 아래 확정값으로 대체한다. 구현은 사용자가 직접 한다(안내: `docs/guides/e4_implementation_guide.md`).
 
 | # | 항목 | 확정 | 논문 대비 | 사용자 메모 |
 |---|---|---|---|---|

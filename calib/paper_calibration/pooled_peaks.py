@@ -1,5 +1,5 @@
 """레이어마다 9개 문제를 이어 붙인(pooled) 희소도 분포에서 봉우리를 세고, 합침 때문에 생기는 가짜 봉우리를 점검한다.
-사전 기록: docs/e3_paper_calibration_spec.md "문제 전체 합친(pooled) 분포의 3봉 확인".
+사전 기록: docs/criteria/e3_paper_calibration_spec.md "문제 전체 합친(pooled) 분포의 3봉 확인".
 
 사용: HF_HUB_OFFLINE=1 python -I pooled_peaks.py --dir THRESH_DIR --out OUT_DIR
 산출: result.json, 표(stdout), 갤러리 index.html + 채널별 32레이어 격자 그림

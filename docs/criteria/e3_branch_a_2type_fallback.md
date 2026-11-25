@@ -7,7 +7,7 @@
 
 ## 1. 기존 사전 기준과 판정
 
-원래의 분기점 A 기준은 `docs/e3_branch_a_criteria.md`에 고정되어 있다.
+원래의 분기점 A 기준은 `docs/criteria/e3_branch_a_criteria.md`에 고정되어 있다.
 
 - 각 프롬프트·레이어에 KDE를 적용한다.
 - Scott factor ×0.5, ×1, ×2를 비교한다.

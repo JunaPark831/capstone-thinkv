@@ -1,4 +1,4 @@
-"""'봉우리다운' 봉우리만 남기는 필터 (논문에 없는 우리의 정의). 사전 기록: docs/e3_paper_calibration_spec.md "봉우리다운 것만".
+"""'봉우리다운' 봉우리만 남기는 필터 (논문에 없는 우리의 정의). 사전 기록: docs/criteria/e3_paper_calibration_spec.md "봉우리다운 것만".
 
 peaklike(d, prom, dist, dip): d = KDE 밀도(512점 격자, 0~1), 반환 = 남은 봉우리의 격자 인덱스.
   prom: 전체 최댓값 대비 prominence 하한

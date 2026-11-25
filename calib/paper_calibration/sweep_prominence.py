@@ -1,4 +1,4 @@
-"""prominence 필터를 건 find_peaks 로 봉우리를 다시 센다. 사전 기록: docs/e3_paper_calibration_spec.md "prominence 필터 적용 재측정 사전 기록".
+"""prominence 필터를 건 find_peaks 로 봉우리를 다시 센다. 사전 기록: docs/criteria/e3_paper_calibration_spec.md "prominence 필터 적용 재측정 사전 기록".
 
 사용: python -I sweep_prominence.py --dir DATA_DIR --out OUT_DIR [--prom-main 0.05]
 대상 1: Algorithm 1 (변형 4 x 워밍업 {0,1100} x prominence 단계), 대상 2: 분위수 방식의 φ̄ (quantile_calibration.py 와 같은 정의).

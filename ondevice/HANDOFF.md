@@ -2,7 +2,7 @@
 
 ## 맡는 일
 VENTUNO Q 보드에 ThinKV를 올리는 코드. **NPU는 가중치 계산, CPU는 KV 캐시(진짜 양자화 저장·퇴출·빈칸 재사용)와 어텐션**을 맡는다.
-스펙은 `docs/ondevice_npu_cpu_design.md` 하나다. 먼저 전부 읽는다.
+스펙은 `docs/design/ondevice_npu_cpu_design.md` 하나다. 먼저 전부 읽는다.
 
 ## 규칙
 - 코드는 **`ondevice/` 안에만** 쓴다. 테스트는 **`ondevice/tests/`**.

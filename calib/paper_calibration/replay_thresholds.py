@@ -1,5 +1,5 @@
 """저장된 token_ids 를 청크 teacher-forcing 으로 재생하며 희소도를 문턱 4개(1/2/5/10%) × 변형 4개로 다시 잰다.
-사전 기록: docs/e3_paper_calibration_spec.md "문턱 1% → 2·5·10% 재측정". 1% 채널은 저장값과 대조한다(회귀 확인).
+사전 기록: docs/criteria/e3_paper_calibration_spec.md "문턱 1% → 2·5·10% 재측정". 1% 채널은 저장값과 대조한다(회귀 확인).
 
 사용: HF_HUB_OFFLINE=1 python -I replay_thresholds.py --dir DATA_DIR --out OUT_DIR [--chunk 512] [--only 0009]
 출력: OUT_DIR/{idx}.pt — 'variants' 17채널(예: win1024@5), 'sparsity' (17, L, n-1) fp16, 'token_ids', 'regression' (1% 채널 대 저장값 최대 차이)

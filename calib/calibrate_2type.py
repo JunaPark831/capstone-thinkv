@@ -1,8 +1,8 @@
 """Two-type (|T|=2) fallback calibration on layer 4.
 
 This script is the post-hoc exploratory fallback described in
-docs/e3_branch_a_2type_fallback.md (§6). The preregistered three-mode
-branch-A criterion in docs/e3_branch_a_criteria.md was NOT met; this
+docs/criteria/e3_branch_a_2type_fallback.md (§6). The preregistered three-mode
+branch-A criterion in docs/criteria/e3_branch_a_criteria.md was NOT met; this
 analysis does not re-open or relax that criterion.
 
 Fixed analysis settings (doc §6):
